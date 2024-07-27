@@ -1,12 +1,12 @@
-### BE: GenAI Addition
+# BE: GenAI Addition
 ## Recommendation API Requests :
 
-# Recommendation API Request Based on a user's registered preference :
+### Recommendation API Request Based on a user's registered preference :
 <img width="1415" alt="Screenshot 1446-01-21 at 5 21 17 PM" src="https://github.com/user-attachments/assets/5ebcaa57-20e2-4918-bf63-6565e4dc4d75">
 <img width="580" alt="Screenshot 1446-01-21 at 5 20 58 PM" src="https://github.com/user-attachments/assets/0c704935-9528-4876-bb6c-d557fb1a8ce0">
 <img width="473" alt="Screenshot 1446-01-21 at 5 19 51 PM" src="https://github.com/user-attachments/assets/5ff35906-4b91-4618-96f9-b7614816d4ed">
 
-# Recommendation API Request Based on a user's query request :
+### Recommendation API Request Based on a user's query request :
 <img width="555" alt="Screenshot 1446-01-21 at 5 17 58 PM" src="https://github.com/user-attachments/assets/0d0c4ebf-c20b-4704-97ed-fde72c705d43">
 <img width="1439" alt="Screenshot 1446-01-21 at 5 18 38 PM" src="https://github.com/user-attachments/assets/721ec271-4d89-4208-a004-c5dd27cd2d26">
 
