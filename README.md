@@ -1,7 +1,12 @@
 # BE: GenAI Addition
+## How to Run:
+Running the main.py file will start up both FatsAPI and Streamlit, the database integration could be done manually usng the steps provided at the end of this README file, or could instantaniously be created through the code itself I believe.
+The vector database and the PostgreSQL database data integration has been done manually through the llm_crud file
+
 ## Recommendation API Requests :
 
 ### Recommendation API Request Based on a user's registered preference :
+The idea behind this is that the user would input their preference, through that registered preference recommendations will be provided.
 <img width="473" alt="Screenshot 1446-01-21 at 5 19 51 PM" src="https://github.com/user-attachments/assets/5ff35906-4b91-4618-96f9-b7614816d4ed">
 <img width="580" alt="Screenshot 1446-01-21 at 5 20 58 PM" src="https://github.com/user-attachments/assets/0c704935-9528-4876-bb6c-d557fb1a8ce0">
 <img width="1415" alt="Screenshot 1446-01-21 at 5 21 17 PM" src="https://github.com/user-attachments/assets/5ebcaa57-20e2-4918-bf63-6565e4dc4d75">
