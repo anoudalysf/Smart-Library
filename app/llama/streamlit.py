@@ -13,10 +13,10 @@ from langchain_community.embeddings import OllamaEmbeddings
 
 app = FastAPI()
 
-st.header("Books Booksss Books!")
+st.header("Books Books Books!")
 
 embeddings = OllamaEmbeddings(model="nomic-embed-text")
-db = Chroma(persist_directory="./chrochro", embedding_function=embeddings)
+db = Chroma(persist_directory="./chromadb", embedding_function=embeddings)
 llm = Ollama(model="llama3.1")
 
 
