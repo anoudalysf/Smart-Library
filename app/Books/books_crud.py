@@ -17,7 +17,7 @@ import re
 
 
 embeddings = OllamaEmbeddings(model="nomic-embed-text")
-persist_directory = '/Users/aalyousef001/Proj_FastAPI/Smart-Library/app/my-llm/chrochro'
+persist_directory = '/Users/aalyousef001/Proj_FastAPI/Smart-Library/app/llama/chromadb'
 
 def get_books(db: Session, start: int = 0, limit: int = 100):
     start = abs(start)
@@ -74,7 +74,7 @@ def create_book(db: Session, book_data: books_schema.Books_create):
         )
 
         documents = text_splitter.split_documents([doc])
-        vector_store = Chroma.from_documents(documents, embeddings, persist_directory='/Users/aalyousef001/Proj_FastAPI/Smart-Library/app/my-llm/chrochro')
+        vector_store = Chroma.from_documents(documents, embeddings, persist_directory='/Users/aalyousef001/Proj_FastAPI/Smart-Library/app/llama/chromadb')
         vector_store.persist()
 
         return db_book
