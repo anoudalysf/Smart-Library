@@ -16,6 +16,10 @@ The idea behind this is that the user would input their preference, through that
 <img width="1439" alt="Screenshot 1446-01-21 at 5 18 38 PM" src="https://github.com/user-attachments/assets/721ec271-4d89-4208-a004-c5dd27cd2d26">
 
 
+## Chatbot Streamlit UI :
+<img width="831" alt="Screenshot 1446-01-21 at 6 27 14 PM" src="https://github.com/user-attachments/assets/8f42a29a-a00f-49fd-9a62-bc39fd0971a0">
+
+
 
 ## How to create  the postgresql database :
 
