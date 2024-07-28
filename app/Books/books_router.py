@@ -16,7 +16,7 @@ persist_directory = 'chromadb'
 
 # GET /books: Retrieve a list of all books.
 @app.get("/books/", response_model=list[books_schema.Books], tags=["books"])
-def retrieve_all_books(start: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+def retrieve_all_books(start: int = 0, limit: int = 6500, db: Session = Depends(get_db)):
     return books_crud.get_books(db, start=start, limit=limit)
 
 

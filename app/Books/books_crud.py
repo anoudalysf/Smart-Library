@@ -19,9 +19,9 @@ import re
 embeddings = OllamaEmbeddings(model="nomic-embed-text")
 persist_directory = '/Users/aalyousef001/Proj_FastAPI/Smart-Library/app/llama/chromadb'
 
-def get_books(db: Session, start: int = 0, limit: int = 100):
+def get_books(db: Session, start: int = 0, limit: int = 6500):
     start = abs(start)
-    limit = min(max(limit, 1), 100)
+    limit = min(max(limit, 1), 6500)
     list_of_books = db.query(books_model.Book).offset(start).limit(limit).all()
     books_services.check_books(repr(list_of_books))
     return list_of_books

@@ -29,6 +29,7 @@ sse-starlette = "^2.1.2"
 gpt4all = "^2.7.0"
 bs4 = "^0.0.2"
 langchain-ollama = "^0.1.0"
+fastapi-cli = "^0.0.4"
 
 
 [build-system]
