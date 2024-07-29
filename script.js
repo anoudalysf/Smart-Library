@@ -29,10 +29,11 @@ function displayBooks(books) {
         card.className = 'book-item';
         card.style.backgroundColor = colors[index % colors.length];
         card.innerHTML = `
-            <div class="cover-photo"></div>
+            <div class="cover-photo">
+                <img src="${book.thumbnail}" alt="${book.title}" />
             <h2 class="book-title">${book.title}</h2>
-            <p><strong>Author:</strong> ${book.authors}</p>
-            <p><strong>Published:</strong> ${book.published_year}</p>
+            <p class="book-title"><strong>Author:</strong> ${book.authors}</p>
+            <p class="book-title"><strong>Published:</strong> ${book.published_year}</p>
         `;
         container.appendChild(card);
     });
