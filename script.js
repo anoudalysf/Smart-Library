@@ -31,9 +31,9 @@ function displayBooks(books) {
         card.innerHTML = `
             <div class="cover-photo">
                 <img src="${book.thumbnail}" alt="${book.title}" />
-            <h2 class="book-title">${book.title}</h2>
+            <h2 style="font-size: 1.25em;"class="book-title">${book.title}</h2>
             <p class="book-title"><strong>Author:</strong> ${book.authors}</p>
-            <p class="book-title"><strong>Published:</strong> ${book.published_year}</p>
+            <p style="font-size: 0.85em;class="book-title"><strong>Published:</strong> ${book.published_year}</p>
         `;
         container.appendChild(card);
     });

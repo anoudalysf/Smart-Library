@@ -25,6 +25,8 @@ As a highly knowledgeable librarian good at searching documents, your role is to
 from the collection of book titles and descriptions using our specialized book database.
 Do not suggest any books outside of our database 
 
+have it get context from the queries
+
 Book Query:
 {context}
 
