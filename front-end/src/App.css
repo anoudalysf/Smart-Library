@@ -1,0 +1,71 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+
+body {
+    font-family: Playfair Display, Arial;
+}
+
+.container {
+    width: 70%;
+    margin: 0 auto; /* to center the divs */
+    text-align: center;
+}
+
+.page-title {
+    margin: 30px 0;
+    font-size: 3em;
+}
+
+.search-bar {
+    margin-bottom: 20px;
+}
+
+.search-bar input {
+    font-family: Playfair Display, Arial;
+    width: 60%;
+    padding: 10px;
+    font-size: 1em;
+    border: 1px solid #ccc;
+}
+
+.search-bar button {
+    font-family: Playfair Display, Arial;
+
+    padding: 10px;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    border-left: none;
+    cursor: pointer;
+}
+
+.book-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly; 
+    gap: 15px;
+    max-height: 60vh; 
+    overflow-y: auto; /* for scroling */
+}
+
+.book-item {
+    width: 20%;
+    border: 10px solid #c1c1c1; /* the gray border outside */
+    border-radius: 15px; /* for smoothed corners */
+    padding: 10px;
+    background-color: #f9f9f9;
+}
+
+.cover-photo {
+    width: 100%;
+    height: 210px; 
+    background-color: #ccc;
+    margin-bottom: 30px;
+}
+
+.book-title {
+    font-size: 1em;
+}
+
+img {
+    width: 130px;
+    height: 210px;
+  }

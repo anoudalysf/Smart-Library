@@ -48,7 +48,7 @@ body {
 
 .book-item {
     width: 20%;
-    border: 10px solid #ddd; /* the gray border outside */
+    border: 10px solid #c1c1c1; /* the gray border outside */
     border-radius: 15px; /* for smoothed corners */
     padding: 10px;
     background-color: #f9f9f9;
