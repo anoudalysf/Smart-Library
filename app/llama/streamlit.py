@@ -16,7 +16,7 @@ app = FastAPI()
 st.header("Books Books Books!")
 
 embeddings = OllamaEmbeddings(model="nomic-embed-text")
-db = Chroma(persist_directory="./chromadb", embedding_function=embeddings)
+db = Chroma(persist_directory="./Users/aalyousef001/My_Smart_Library/Smart-Library/app/llama/chromadb", embedding_function=embeddings)
 llm = Ollama(model="llama3.1")
 
 
@@ -68,7 +68,7 @@ conversational_rag_chain = RunnableWithMessageHistory(
 #     return answer
 
 def get_response(question, filters=None):
-    retriever = db.as_retriever(top_k=10)
+    retriever = db.as_retriever(top_k=3)
     
     if filters:
         retriever = retriever.with_filters(filters)
@@ -94,6 +94,10 @@ prompt = st.chat_input("Say something")
 if prompt:
     response=get_response(prompt)
     st.write(f"User: {prompt}")
+    conversational_rag_chain.invoke(
+        {"ability": {custom_prompt}, "input": {prompt}},
+        config={"configurable": {"session_id": 1}},
+        )
     with st.chat_message("user"):
         st.write(response)
 

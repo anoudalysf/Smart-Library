@@ -51,14 +51,14 @@ def create_book(db: Session, book_data: books_schema.Books_create):
 
         text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
         content = (
-            f"Authors: {book_data.authors}\n"
-            f"Title: {book_data.title}\n"
-            f"Categories: {book_data.categories}\n"
-            f"Published Year: {book_data.published_year}\n"
-            f"Average Rating: {book_data.average_rating}\n"
-            f"Number of Pages: {book_data.num_pages}\n"
-            f"Ratings Count: {book_data.ratings_count}\n"
-            f"Description: {book_data.description}"
+            f"Authors: {book_data['authors']}\n"
+            f"Title: {book_data['title']}\n"
+            f"Categories: {book_data['categories']}\n"
+            f"Published Year: {book_data.get('published_year', 0)}\n"
+            f"Average Rating: {book_data.get('average_rating', 0)}\n"
+            f"Number of Pages: {book_data.get('num_pages', 0)}\n"
+            f"Ratings Count: {book_data.get('ratings_count', 0)}\n"
+            f"Description: {book_data['description']}"
         )
         doc = Document(
             page_content=content,

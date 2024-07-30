@@ -2,14 +2,14 @@ import os
 import pandas as pd
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
-from fastapi import FastAPI, Depends
+# from fastapi import FastAPI, Depends
 from langchain_community.llms import Ollama
 from langchain_community.embeddings import OllamaEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import Chroma
-from langchain.chains import VectorDBQA
+# from langchain.chains import VectorDBQA
 from app.Books import books_model
-from app.common.config.database import get_db
+# from app.common.config.database import get_db
 from langchain.schema import Document  
 
 SQLALCHEMY_DATABASE_URL = "postgresql://postgres:Passw0rd@localhost:5432/smart_library_database"
@@ -24,7 +24,7 @@ persist_directory = 'chromadb'
 if not os.path.exists(persist_directory):
     os.makedirs(persist_directory)
 
-df = pd.read_csv("books_cleaned.csv")
+df = pd.read_csv("/Users/aalyousef001/My_Smart_Library/Smart-Library/app/llama/books_cleaned.csv")
 
 print("Columns in the DataFrame:")
 print(df.columns)

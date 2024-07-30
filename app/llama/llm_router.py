@@ -14,11 +14,11 @@ def add_books_to_db_and_chroma(file_path: str, db: Session = Depends(get_db)):
         df = pd.read_csv(file_path)
         
         embeddings = OllamaEmbeddings(model="nomic-embed-text")
-        chroma_db = Chroma(persist_directory="chromadb", embedding_function=embeddings)
+        chroma_db = Chroma(persist_directory="/Users/aalyousef001/My_Smart_Library/Smart-Library/app/llama/chromadb", embedding_function=embeddings)
         
         for _, row in df.iterrows():
             book_data = row.to_dict()
-            books_crud.create_book(db, book_data, embeddings, persist_directory='chromadb')
+            books_crud.create_book(db, book_data, embeddings, persist_directory='/Users/aalyousef001/My_Smart_Library/Smart-Library/app/llama/chromadb')
         
         return {"message": "Books added successfully"}
     except Exception as e:
