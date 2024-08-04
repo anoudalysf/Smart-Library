@@ -7,8 +7,6 @@ import ChatBot from './components/ChatBot/ChatBot.jsx'
 import AuthButton from './components/AuthButton/AuthButton.jsx'
 import FilterButton from './components/FilterButton/FilterButton.jsx';
 
-
-
 const App = () => {
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);

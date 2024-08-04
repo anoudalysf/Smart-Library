@@ -257,6 +257,7 @@ def recommend_books_from_query(db: Session, user_query: str):
 template="""
     As a highly knowledgeable librarian good at searching documents, your role is to accurately answer book questions 
     with only the use of the data given to you from the collection of book titles and descriptions using our specialized book database.
+    Make the user feel comfortable and lightly converse when needed.
     You do not need to be stringent with the keywords in the question related to these topics.
     Otherwise, tell the user you don't have what they're looking for.
     Do not suggest any books outside of our database 
