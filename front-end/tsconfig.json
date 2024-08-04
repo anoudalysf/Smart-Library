@@ -1,0 +1,8 @@
+{
+    "compilerOptions": {
+      "outDir": "./built", //Emit all of the output files in built (with outDir).
+      "allowJs": true, //Accept JavaScript files as inputs (with allowJs).
+      "target": "es5" //Translate newer JavaScript constructs down to an older version like ECMAScript 5 (using target).
+    },
+    "include": ["./src/**/*"] //Read in any files it understands in the src directory (with include).
+  }
