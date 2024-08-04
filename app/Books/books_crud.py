@@ -19,9 +19,9 @@ import re
 embeddings = OllamaEmbeddings(model="nomic-embed-text")
 persist_directory = '/Users/aalyousef001/Proj_FastAPI/Smart-Library/app/llama/chromadb'
 
-def get_books(db: Session, start: int = 0, limit: int = 6500):
+def get_books(db: Session, start: int = 0, limit: int = 100):
     start = abs(start)
-    limit = min(max(limit, 1), 6500)
+    limit = min(max(limit, 1), 100)
     list_of_books = db.query(books_model.Book).offset(start).limit(limit).all()
     books_services.check_books(repr(list_of_books))
     return list_of_books
@@ -83,11 +83,18 @@ def create_book(db: Session, book_data: books_schema.Books_create):
         raise e
 
 
-def get_single_book(db: Session, id):
+def get_book_by_id(db: Session, id):
     book_to_get = (
         db.query(books_model.Book).filter(books_model.Book.book_id == id).first()
     )
     books_services.check_single_book(book_to_get)
+    return book_to_get
+
+def get_book_by_title(db: Session, title: str):
+    book_to_get = (
+        db.query(books_model.Book).filter(books_model.Book.title == title).first()
+    )
+    # books_services.check_single_book(book_to_get)
     return book_to_get
 
 
@@ -245,3 +252,78 @@ def recommend_books_from_query(db: Session, user_query: str):
     except Exception as e:
         print(f"An error occurred during recommendation: {e}")
         raise e
+
+
+template="""
+    As a highly knowledgeable librarian good at searching documents, your role is to accurately answer book questions 
+    with only the use of the data given to you from the collection of book titles and descriptions using our specialized book database.
+    Make the user feel comfortable and lightly converse when needed.
+    You do not need to be stringent with the keywords in the question related to these topics.
+    Otherwise, tell the user you don't have what they're looking for.
+    Do not suggest any books outside of our database 
+    Provide the results in plain text without any additional formatting or special characters.
+    Do NOT whatsoever add ANY special characters such as '\n' or quotes '"'
+    Example of correct response:
+    Title: Book Title.
+    Description: The book description.
+    DO NOT FORMAT YOUR TEXT, ONLY USE COMMAS AND DOTS WHEN NEEDED!!!!!!!!
+
+
+
+    Book Query:
+    {context}
+
+    Query: 
+    {query}"""
+
+custom_prompt = PromptTemplate(template=template, input_variables=["context", "query"])
+
+
+def chat_with_bot(db: Session, user_query: str):
+    context = f"User query: '{user_query}'"
+
+    llm = Ollama(model="llama3.1")
+
+    llm_chain = LLMChain(prompt=custom_prompt, llm=llm)
+
+    try:
+        input_dict = {"context": context, "query": user_query}
+        result = llm_chain(input_dict)
+        chat_response = result["text"]
+
+        # clean up the response
+        chat_response = chat_response.strip()
+
+        return chat_response
+    except Exception as e:
+        print(f"An error occurred during chat with bot: {e}")
+        raise e
+    
+def get_books_sorted_by_rating_desc(db: Session, start: int = 0, limit: int = 100):
+    start = abs(start)
+    limit = min(max(limit, 1), 100)
+    list_of_books = db.query(books_model.Book).order_by(books_model.Book.average_rating.desc()).offset(start).limit(limit).all()
+    books_services.check_books(repr(list_of_books))
+    return list_of_books
+
+def get_books_sorted_by_rating_asc(db: Session, start: int = 0, limit: int = 100):
+    start = abs(start)
+    limit = min(max(limit, 1), 100)
+    list_of_books = db.query(books_model.Book).order_by(books_model.Book.average_rating.asc()).offset(start).limit(limit).all()
+    books_services.check_books(repr(list_of_books))
+    return list_of_books
+
+def get_books_sorted_by_year_desc(db: Session, start: int = 0, limit: int = 100):
+    start = abs(start)
+    limit = min(max(limit, 1), 100)
+    list_of_books = db.query(books_model.Book).order_by(books_model.Book.published_year.desc()).offset(start).limit(limit).all()
+    books_services.check_books(repr(list_of_books))
+    return list_of_books
+
+def get_books_sorted_by_year_asc(db: Session, start: int = 0, limit: int = 100):
+    start = abs(start)
+    limit = min(max(limit, 1), 100)
+    list_of_books = db.query(books_model.Book).order_by(books_model.Book.published_year.asc()).offset(start).limit(limit).all()
+    books_services.check_books(repr(list_of_books))
+    return list_of_books
+

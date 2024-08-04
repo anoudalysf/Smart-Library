@@ -16,7 +16,7 @@ persist_directory = 'chromadb'
 
 # GET /books: Retrieve a list of all books.
 @app.get("/books/", response_model=list[books_schema.Books], tags=["books"])
-def retrieve_all_books(start: int = 0, limit: int = 6500, db: Session = Depends(get_db)):
+def retrieve_all_books(start: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     return books_crud.get_books(db, start=start, limit=limit)
 
 
@@ -36,10 +36,17 @@ async def create_book(
         raise HTTPException(status_code=500, detail=str(e))
 
 
+# GET /books/:title: Retrieve details of a specific book by its title.
+@app.get("/books/{title}", response_model=books_schema.Books, tags=["books"])
+async def retrieve_book_by_title(title: str, db: Session = Depends(get_db)):
+    return books_crud.get_book_by_title(db, title)
+
+
 # GET /books/:id: Retrieve details of a specific book by its ID.
 @app.get("/books/{id}", response_model=books_schema.Books, tags=["books"])
-async def retrieve_single_book(id: int, db: Session = Depends(get_db)):
-    return books_crud.get_single_book(db, id)
+async def retrieve_book_by_id(id: int, db: Session = Depends(get_db)):
+    return books_crud.get_book_by_id(db, id)
+
 
 
 # PUT /books/:id: Update an existing book record by its ID (Admin only).
@@ -86,3 +93,34 @@ async def recommend_books_from_query(user_query: str, db: Session = Depends(get_
     except Exception as e:
         print(f"An error occurred while getting recommendations: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+    
+# GET /chat_with_bot: Retrieve chat response from the bot based on user query
+@app.get("/chat_with_bot", response_model=str, tags=["chat"])
+async def chat_with_bot_endpoint(user_query: str, db: Session = Depends(get_db)):
+    try:
+        chat_response = books_crud.chat_with_bot(db, user_query)
+        return chat_response
+    except Exception as e:
+        print(f"An error occurred while chatting with the bot: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+    
+# GET /books/sorted/rating_desc: Retrieve a list of books sorted by rating in descending order.
+@app.get("/books/sorted/rating_desc", response_model=list[books_schema.Books], tags=["books"])
+def retrieve_books_sorted_by_rating_desc(start: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    return books_crud.get_books_sorted_by_rating_desc(db, start=start, limit=limit)
+
+# GET /books/sorted/rating_asc: Retrieve a list of books sorted by rating in ascending order.
+@app.get("/books/sorted/rating_asc", response_model=list[books_schema.Books], tags=["books"])
+def retrieve_books_sorted_by_rating_asc(start: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    return books_crud.get_books_sorted_by_rating_asc(db, start=start, limit=limit)
+
+    
+# GET /books/sorted/year_desc: Retrieve a list of books sorted by published year in descending order.
+@app.get("/books/sorted/year_desc", response_model=list[books_schema.Books], tags=["books"])
+def retrieve_books_sorted_by_rating_desc(start: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    return books_crud.get_books_sorted_by_year_desc(db, start=start, limit=limit)
+
+# GET /books/sorted/year_asc: Retrieve a list of books sorted by published year in ascending order.
+@app.get("/books/sorted/year_asc", response_model=list[books_schema.Books], tags=["books"])
+def retrieve_books_sorted_by_rating_asc(start: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    return books_crud.get_books_sorted_by_year_asc(db, start=start, limit=limit)

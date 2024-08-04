@@ -1,0 +1,50 @@
+.auth-toggle {
+    position: fixed;
+    top: 20px;
+    right: 40px;
+    background-color: #19191B;
+    color: white;
+    border: none;
+    border-radius: 25%;
+    padding: 10px 0px;
+  }
+
+button {
+    background-color: #172242;
+    border: none;
+}
+
+
+.auth-box {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly; 
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    width: 100px;
+    height: 110px;
+    background-color: #172242;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000; /* makes the button on top of other content */
+    overflow: hidden;
+  }
+
+.auth-login {
+    font-family: Work Sans;
+    text-align: center;
+    font-size: 15px;
+    color: white;
+    background-color: #172242;
+
+}
+
+.auth-signup {
+    font-family: Work Sans;
+    text-align: center;
+    font-size: 15px;
+    color: white;
+    background-color: #172242;
+
+} 

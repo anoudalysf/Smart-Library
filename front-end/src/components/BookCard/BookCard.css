@@ -1,0 +1,104 @@
+.book-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly; 
+    gap: 15px;
+    /* max-height: 100vh; 
+    overflow-y: auto; for scrolling */
+}
+
+.book-item {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+    width: 20%;
+    border: 0px; /* the gray border outside */
+    border-radius: 10px; /* for smoothed corners */
+    padding: 15px;
+    background-color: #172242;
+}
+
+.cover-photo {
+    font-size: 1em;
+    width: 95%;
+    height: 300px; 
+    background-color: #445A9A;
+    margin-bottom: 15px;
+    margin-left: 8px;
+    border-radius: 15px; 
+}
+
+.book-title {
+    color: white;
+    font-size: 1em;
+    text-align: left;
+    width: 100%;
+
+}
+
+.book-description{
+  margin-top: -10px;
+    color: white;
+    font-size: .63em;
+    width: 190px;
+    text-align: left;
+    /* height: 230px; */
+}
+
+.multiple-titles {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between; 
+    gap: 5px;
+    text-align: left;
+
+}
+
+.book-sub-title {
+    color: white;
+    font-size: .75em;
+    text-align: left;
+
+}
+
+img {
+    width: 185px;
+    height: 270px;
+    border-radius: 5px; 
+  }
+
+.flip-card {
+  perspective: 1000px;
+  width: 20%;
+  position: relative;
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.5s;
+}
+
+.flip-card.flipped .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-card-front,
+.flip-card-back {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  backface-visibility: hidden;
+  border-radius: 15px;
+  padding: 15px;
+  background-color: #445A9A;
+}
+
+.flip-card-front {
+  z-index: 2;
+}
+
+.flip-card-back {
+  transform: rotateY(180deg);
+  z-index: 1;
+}

@@ -41,8 +41,8 @@ def healthz():
     return True
 
 def run_streamlit():
-    subprocess.Popen(["streamlit", "run", "/Users/aalyousef001/My_Smart_Library/Smart-Library/app/llama/streamlit.py"])
+    subprocess.Popen(["streamlit", "run", "/Users/aalyousef001/My_Smart_Library/Smart-Library/app/llama/chatbot.py"])
 
 if __name__ == "__main__":
-    run_streamlit()
+    # run_streamlit()
     uvicorn.run(app, host="0.0.0.0", port=8000)
