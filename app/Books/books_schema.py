@@ -35,9 +35,9 @@ class Books_create(BaseModel):
 class User_preferences(BaseModel):
     preference_id: int
     user_id: str
-    preferences: str
+    book_id: int
 
 
 class User_preferences_create(BaseModel):
-    # user_id: str
-    preferences: str
+    user_id: str
+    book_id: int

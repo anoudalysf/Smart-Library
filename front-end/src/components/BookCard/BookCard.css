@@ -107,3 +107,11 @@ img {
   z-index: 1;
 }
 
+.book-title svg {
+  cursor: pointer;
+  transition: fill 0.3s ease;
+}
+
+.book-title svg:hover {
+  fill: #FF6347; /* Change to your desired color on hover */
+}

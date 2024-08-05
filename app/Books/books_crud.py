@@ -326,3 +326,28 @@ def get_books_sorted_by_year_asc(db: Session, start: int = 0, limit: int = 100):
     books_services.check_books(repr(list_of_books))
     return list_of_books
 
+def add_user_preference(db: Session, preference_data: books_schema.User_preferences_create):
+    db_preference = books_model.User_preference(
+        user_id=preference_data.user_id,
+        book_id=preference_data.book_id
+    )
+    db.add(db_preference)
+    db.commit()
+    db.refresh(db_preference)
+    return db_preference
+
+def get_user_preferences(db: Session, user_id: str):
+    preferences = db.query(books_model.User_preference).filter(books_model.User_preference.user_id == user_id).all()
+    book_ids = [preference.book_id for preference in preferences]
+    books = db.query(books_model.Book).filter(books_model.Book.book_id.in_(book_ids)).all()
+    return books
+
+def delete_user_preference(db: Session, preference_data: books_schema.User_preferences_create):
+    preference = db.query(books_model.User_preference).filter_by(
+        user_id=preference_data.user_id,
+        book_id=preference_data.book_id
+    ).first()
+    if preference:
+        db.delete(preference)
+        db.commit()
+    return preference

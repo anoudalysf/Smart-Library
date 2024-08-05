@@ -53,7 +53,7 @@ const AdminPanel = () => {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}` // If using token for authentication
+          'Authorization': `Bearer ${localStorage.getItem('token')}` // using token for authentication
         }
       });
       if (response.ok) {

@@ -124,3 +124,24 @@ def retrieve_books_sorted_by_rating_desc(start: int = 0, limit: int = 100, db: S
 @app.get("/books/sorted/year_asc", response_model=list[books_schema.Books], tags=["books"])
 def retrieve_books_sorted_by_rating_asc(start: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     return books_crud.get_books_sorted_by_year_asc(db, start=start, limit=limit)
+
+# Add a new user preference
+@app.post("/user_preferences/", tags=["user_preferences"])
+async def add_user_preference(
+    preference: books_schema.User_preferences_create,
+    db: Session = Depends(get_db)
+):
+    return books_crud.add_user_preference(db, preference)
+
+# Get user preferences (liked books)
+@app.get("/user_preferences/{user_id}", response_model=list[books_schema.Books], tags=["user_preferences"])
+async def get_user_preferences(user_id: str, db: Session = Depends(get_db)):
+    return books_crud.get_user_preferences(db, user_id)
+
+# Delete a user preference
+@app.delete("/user_preferences/", tags=["user_preferences"])
+async def delete_user_preference(
+    preference: books_schema.User_preferences_create,
+    db: Session = Depends(get_db)
+):
+    return books_crud.delete_user_preference(db, preference)

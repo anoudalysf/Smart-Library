@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 
+
 .admin-panel-container {
   display: flex;
   flex-direction: column;
@@ -7,7 +8,7 @@
   justify-content: flex-start;
   height: 100vh;
   padding: 20px;
-  background-color: #19191B; /* Adjust color as needed */
+  background-color: #19191B; 
   overflow-y: auto;
 }
 
@@ -21,7 +22,7 @@
 
 .admin-panel-title {
   font-family: Work Sans;
-  color: #ecf0f1; /* Adjust color as needed */
+  color: #ecf0f1; 
 }
 
 .admin-panel-content {
@@ -33,10 +34,10 @@
 .books-container, .users-container {
   flex: 1;
   margin: 0 10px;
-  background-color: #172242; /* Adjust color as needed */
+  background-color: #172242; 
   padding: 20px;
   border-radius: 5px;
-  color: #ecf0f1; /* Adjust color as needed */
+  color: #ecf0f1; 
 }
 
 .books-container h2, .users-container h2 {
