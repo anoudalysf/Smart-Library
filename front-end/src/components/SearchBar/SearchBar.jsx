@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import "./SearchBar.css"
+import FilterButton from '../FilterButton/FilterButton';
 
 const SearchIcon = () => {
   return (
@@ -21,7 +22,7 @@ const SearchIcon = () => {
   )
 }
 
-const SearchBar = ({ onSearch }) => {
+const SearchBar = ({ onSearch, onFilterChange }) => {
   const [query, setQuery] = useState('');
 
   const handleSearch = async (e) => {
@@ -43,6 +44,7 @@ const SearchBar = ({ onSearch }) => {
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Search by title..."
       />
+      <FilterButton onFilterChange={onFilterChange} /> 
     </form>
   );
 };

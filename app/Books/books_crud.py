@@ -81,6 +81,24 @@ def create_book(db: Session, book_data: books_schema.Books_create):
     except Exception as e:
         print(f"An error occurred: {e}")
         raise e
+    
+def update_book(db: Session, book: books_schema.Books_create, id: int):
+    book_to_update = (
+        db.query(books_model.Book).filter(books_model.Book.book_id == id).first()
+    )
+    books_services.check_single_book(book_to_update)
+    book_to_update.title = book.title
+    book_to_update.categories = book.categories
+    book_to_update.description = book.description
+    book_to_update.authors = book.authors
+    book_to_update.published_year = book.published_year
+    book_to_update.average_rating = book.average_rating
+    book_to_update.thumbnail = book.thumbnail
+    book_to_update.num_pages = book.num_pages
+    book_to_update.ratings_count = book.ratings_count
+    db.commit()
+    db.refresh(book_to_update)
+    return book_to_update
 
 
 def get_book_by_id(db: Session, id):
@@ -97,25 +115,6 @@ def get_book_by_title(db: Session, title: str):
     # books_services.check_single_book(book_to_get)
     return book_to_get
 
-
-def update_book(db: Session, book: books_schema.Books_create, id):
-    book_to_update = (
-        db.query(books_model.Book).filter(books_model.Book.book_id == id).first()
-    )
-    books_services.check_single_book(book_to_update)
-    author = (
-        db.query(authors_model.Author)
-        .filter(authors_model.Author.author_id == book.author_id)
-        .first()
-    )
-    books_services.check_author(author)
-    book_to_update.title = book.title
-    book_to_update.categories = book.categories
-    book_to_update.description = book.description
-    book_to_update.authors = book.authors
-    db.commit()
-    db.refresh(book_to_update)
-    return book_to_update
 
 
 def delete_book(db: Session, id):

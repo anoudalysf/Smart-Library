@@ -1,0 +1,71 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+.admin-panel-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  height: 100vh;
+  padding: 20px;
+  background-color: #19191B; /* Adjust color as needed */
+  overflow-y: auto;
+}
+
+.admin-panel-header {
+  font-family: Work Sans;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.admin-panel-title {
+  font-family: Work Sans;
+  color: #ecf0f1; /* Adjust color as needed */
+}
+
+.admin-panel-content {
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+}
+
+.books-container, .users-container {
+  flex: 1;
+  margin: 0 10px;
+  background-color: #172242; /* Adjust color as needed */
+  padding: 20px;
+  border-radius: 5px;
+  color: #ecf0f1; /* Adjust color as needed */
+}
+
+.books-container h2, .users-container h2 {
+  font-family: Work Sans;
+  margin-bottom: 10px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid #ecf0f1;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #445A9A;
+}
+
+td {
+  background-color: #172242;
+}
+
+td.description {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
