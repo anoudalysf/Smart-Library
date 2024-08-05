@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './AuthBox.css';
 
-const AuthBox = ({ onClose }) => {
+const AuthBox = ({ onClose, setAuth }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isLogin, setIsLogin] = useState(true); //toggle between login and register
@@ -38,6 +38,14 @@ const AuthBox = ({ onClose }) => {
       const result = await response.json();
       if (response.ok) {
         alert('Success');
+        if (isLogin) {
+          console.log("Role from response:", result.role);
+          // save the token and username to localStorage
+          localStorage.setItem('token', result.access_token);
+          localStorage.setItem('username', username);
+          localStorage.setItem('role', result.role);
+          setAuth(username, result.role);
+        }
         // handle successful login/registration
         onClose();
       } else {

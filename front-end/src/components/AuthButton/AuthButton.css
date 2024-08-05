@@ -48,3 +48,29 @@ button {
     background-color: #172242;
 
 } 
+
+.auth-logout {
+  font-family: Work Sans;
+  text-align: center;
+  font-size: 15px;
+  color: rgb(255, 0, 0);
+  background-color: #172242;
+
+}
+
+.auth-admin-panel {
+  font-family: Work Sans;
+  text-align: center;
+  font-size: 15px;
+  color: rgb(255, 0, 0);
+  background-color: #172242;
+
+}
+
+.auth-toggle-default {
+  fill: #41D0C8; /* Default color */
+}
+
+.auth-toggle-logged-in {
+  fill: #FFD700; /* Logged-in color, for example, gold */
+}

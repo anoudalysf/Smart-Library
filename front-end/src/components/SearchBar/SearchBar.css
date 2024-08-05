@@ -1,4 +1,5 @@
 .search-bar {
+    display: flex;
     margin-bottom: 50px;
     text-align: left;
     background-color: #172242;

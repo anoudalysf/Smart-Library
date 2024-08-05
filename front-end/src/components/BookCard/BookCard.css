@@ -56,6 +56,10 @@
     color: white;
     font-size: .75em;
     text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
 
 }
 
@@ -102,3 +106,4 @@ img {
   transform: rotateY(180deg);
   z-index: 1;
 }
+

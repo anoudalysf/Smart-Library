@@ -18,6 +18,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 class Token(BaseModel):
     access_token: str
     token_type: str
+    role: str
 
 
 class TokenData(BaseModel):
@@ -71,7 +72,7 @@ def access_token(db: Session, username: str, password: str):
     access_token = create_access_token(
         data={"sub": user.username, "role": user.role}, expires_delta=access_token_expires
     )
-    return Token(access_token=access_token, token_type="bearer")
+    return Token(access_token=access_token, token_type="bearer", role=user.role)
 
 
 async def get_current_user(

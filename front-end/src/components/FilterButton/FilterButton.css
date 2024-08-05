@@ -1,35 +1,37 @@
 .filter-toggle {
-    position: fixed;
-    top: 83px;
-    right: 665px;
-    background-color: #172242;
-    color: white;
-    border: none;
-    border-radius: 25%;
-    padding: 5px 0px;
-  }
-
-.filter-box {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around; 
-    position: fixed;
-    top: 125px;
-    right: 620px;
-    width: 110px;
-    height: 105px;
-    background-color: #172242;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
-    z-index: 1000; /* makes the button on top of other content */
-    overflow: hidden;
-  }
-
-.filter-box button {
-    height: 20px;
+  background-color: #172242;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px;
+  cursor: pointer;
 }
 
-.category {
-    font-size: 13px;
-    color: white;
+.filter-box {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between; 
+  position: fixed;
+  top: 180px;
+  right: 620px;
+  width: 100px;
+  height: 110px;
+  background-color: #172242;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+  z-index: 1000; /* makes the button on top of other content */
+  overflow: hidden;
+}
+
+.filter-box button {
+  height: 20px;
+}
+
+button.category {
+  font-size: 13px;
+  color: white;
+}
+
+.filter-box button:hover {
+  background-color: #445A9A;
 }
