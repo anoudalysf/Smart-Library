@@ -44,7 +44,8 @@ const AuthBox = ({ onClose, setAuth }) => {
           localStorage.setItem('token', result.access_token);
           localStorage.setItem('username', username);
           localStorage.setItem('role', result.role);
-          setAuth(username, result.role);
+          localStorage.setItem('user_id', result.user_id);
+          setAuth(username, result.user_id, result.role);
         }
         // handle successful login/registration
         onClose();

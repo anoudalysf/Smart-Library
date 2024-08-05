@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import "./SearchBar.css"
 import FilterButton from '../FilterButton/FilterButton';
+import LikedBooksButton from '../LikedBooksButton/LikedBooksButton';
+
 
 const SearchIcon = () => {
   return (
@@ -22,7 +24,7 @@ const SearchIcon = () => {
   )
 }
 
-const SearchBar = ({ onSearch, onFilterChange }) => {
+const SearchBar = ({ onSearch, onFilterChange, onLikedBooksFetch }) => {
   const [query, setQuery] = useState('');
 
   const handleSearch = async (e) => {
@@ -45,6 +47,7 @@ const SearchBar = ({ onSearch, onFilterChange }) => {
         placeholder="Search by title..."
       />
       <FilterButton onFilterChange={onFilterChange} /> 
+      <LikedBooksButton onLikedBooksFetch={onLikedBooksFetch} />
     </form>
   );
 };
