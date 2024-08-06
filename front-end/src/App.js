@@ -20,7 +20,7 @@ const App = () => {
   const location = useLocation();
   const [likedBooks, setLikedBooks] = useState([]);
 
-  
+   
   useEffect(() => {
     const token = localStorage.getItem('token');
     const storedUsername = localStorage.getItem('username');
@@ -86,7 +86,7 @@ const App = () => {
       const response = await fetch(`http://localhost:8000/user_preferences/${user_id}`);
       const data = await response.json();
       setLikedBooks(data);
-      handleFilterChange(data); // Update books state with liked books
+      handleFilterChange(data); //update books state with liked books
     } catch (error) {
       console.error('Error fetching liked books:', error);
     }

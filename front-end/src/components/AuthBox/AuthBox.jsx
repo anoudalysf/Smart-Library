@@ -46,6 +46,7 @@ const AuthBox = ({ onClose, setAuth }) => {
           localStorage.setItem('role', result.role);
           localStorage.setItem('user_id', result.user_id);
           setAuth(username, result.user_id, result.role);
+          //check if the user is still logged in
         }
         // handle successful login/registration
         onClose();

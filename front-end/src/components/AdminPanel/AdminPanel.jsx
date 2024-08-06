@@ -47,9 +47,9 @@ const AdminPanel = () => {
     fetchBooks();
   }, []);
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (book_id) => {
     try {
-      const response = await fetch(`http://localhost:8000/books/${id}`, {
+      const response = await fetch(`http://localhost:8000/books/${book_id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -57,7 +57,7 @@ const AdminPanel = () => {
         }
       });
       if (response.ok) {
-        setBooks(books.filter(book => book.book_id !== id));
+        setBooks(books.filter(book => book.book_id !== book_id));
       } else {
         console.error('Failed to delete book');
       }
