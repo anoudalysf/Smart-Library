@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import RateIcon from "../RateIcon/RateIcon";
-import "./BookCard.css"
+import styles from "./BookCard.module.css"
 
 const LikeIcon = ({ onClick, isLiked }) => {
   return(
@@ -26,7 +26,7 @@ const BookFront = ({ book }) => {
 
 const BookBack = ({ book }) => {
   return (
-      <h2 className="book-description">{book.description}</h2>
+      <h2 className={styles.description}>{book.description}</h2>
   );
 };
 
@@ -40,28 +40,28 @@ const BookCard = ({ book, onLike, likedBooks }) => {
   const isLiked = likedBooks.some(likedBook => likedBook.book_id === book.book_id);
 
   return (
-    <div className="book-item">
-      <h2 className="book-title">{book.title} <LikeIcon onClick={() => onLike(book.book_id, isLiked)} isLiked={isLiked} /></h2>
-      <div className="multiple-titles">
-        <p className="book-sub-title">{book.authors}</p>
-        <p className="book-sub-title">{book.published_year}</p>
+    <div className={styles.item}>
+      <h2 className={styles.title}>{book.title} <LikeIcon onClick={() => onLike(book.book_id, isLiked)} isLiked={isLiked} /></h2>
+      <div className={styles.multipleTitles}>
+        <p className={styles.subtitle}>{book.authors}</p>
+        <p className={styles.subtitle}>{book.published_year}</p>
       </div>
-      <div className="cover-photo">
-        <div className={`flip-card ${isFlipped ? "flipped" : ""}`} onClick={handleFlip}>
-          <div className="flip-card-inner">
-            <div className="flip-card-front">
+      <div className={styles.coverPhoto}>
+        <div className={`${styles.flipCard} ${isFlipped ? styles.flipped : ""}`} onClick={handleFlip}>
+          <div className={styles.flipCardInner}>
+            <div className={styles.flipCardFront}>
               <BookFront book={book} />
             </div>
-            <div className="flip-card-back">
+            <div className={styles.flipCardBack}>
               <BookBack book={book} />
               </div>
             </div>
           </div>
       </div>
-      <div className="multiple-titles">
-      <p className="book-sub-title">{book.categories}</p>
-      <div className="book-rating">
-      <p className="book-sub-title">{book.average_rating}
+      <div className={styles.multipleTitles}>
+      <p className={styles.subtitle}>{book.categories}</p>
+      <div className={styles.rating}>
+      <p className={styles.subtitle}>{book.average_rating}
           <RateIcon rating={book.average_rating} /> </p>
         </div>
       </div>
