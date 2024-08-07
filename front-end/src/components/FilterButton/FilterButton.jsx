@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import './FilterButton.css';
 
+const apiUrl = process.env.REACT_APP_API_URL;
+
 const FilterButton = ({onFilterChange}) => {
     const [isOpen, setIsOpen] = useState(false);
 
@@ -19,19 +21,19 @@ const FilterButton = ({onFilterChange}) => {
       };
     
       const handleMostRated = () => {
-        fetchBooks('http://localhost:8000/books/sorted/rating_desc?start=0&limit=100');
+        fetchBooks(`${apiUrl}/books/sorted/rating_desc?start=0&limit=100`);
       };
     
       const handleLeastRated = () => {
-        fetchBooks('http://localhost:8000/books/sorted/rating_asc?start=0&limit=100');
+        fetchBooks(`${apiUrl}/books/sorted/rating_asc?start=0&limit=100`);
       };
     
       const handleYearDesc = () => {
-        fetchBooks('http://localhost:8000/books/sorted/year_desc?start=0&limit=100');
+        fetchBooks(`${apiUrl}/books/sorted/year_desc?start=0&limit=100`);
       };
     
       const handleYearAsc = () => {
-        fetchBooks('http://localhost:8000/books/sorted/year_asc?start=0&limit=100');
+        fetchBooks(`${apiUrl}/books/sorted/year_asc?start=0&limit=100`);
       };
     
       return (
