@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import './AdminPanel.css';
 import UpdateModal from '../UpdateModal/UpdateModal';
 
+const apiUrl = process.env.REACT_APP_API_URL;
+
+
 const DeleteIcon = () => {
   return (
       <svg width="21" height="19" viewBox="0 0 21 19" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -34,7 +37,7 @@ const AdminPanel = () => {
     const fetchBooks = async () => {
       setLoading(true);
       try {
-        const response = await fetch('http://localhost:8000/books');
+        const response = await fetch(`${apiUrl}/books`);
         const data = await response.json();
         setBooks(data);
       } catch (error) {
@@ -49,7 +52,7 @@ const AdminPanel = () => {
 
   const handleDelete = async (book_id) => {
     try {
-      const response = await fetch(`http://localhost:8000/books/${book_id}`, {
+      const response = await fetch(`${apiUrl}/books/${book_id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -73,7 +76,7 @@ const AdminPanel = () => {
 
   const handleSave = async (updatedBook) => {
     try {
-      const response = await fetch(`http://localhost:8000/books/${updatedBook.book_id}`, {
+      const response = await fetch(`${apiUrl}/books/${updatedBook.book_id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

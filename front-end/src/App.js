@@ -8,6 +8,7 @@ import AuthButton from './components/AuthButton/AuthButton.jsx'
 import AdminPanel from './components/AdminPanel/AdminPanel.jsx';
 import { BrowserRouter as Router, Route, Routes, useNavigate, useLocation} from 'react-router-dom';
 
+const apiUrl = process.env.REACT_APP_API_URL;
 
 const App = () => {
   const [books, setBooks] = useState([]);
@@ -67,10 +68,11 @@ const App = () => {
   const fetchBooks = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:8000/books');
+      const response = await fetch(`${apiUrl}/books`);
       const data = await response.json();
       setBooks(data);
     } catch (error) {
+
       console.error('Error fetching books:', error);
     } finally {
       setLoading(false);
@@ -83,7 +85,7 @@ const App = () => {
       return;
     }
     try {
-      const response = await fetch(`http://localhost:8000/user_preferences/${user_id}`);
+      const response = await fetch(`${apiUrl}/user_preferences/${user_id}`);
       const data = await response.json();
       setLikedBooks(data);
       handleFilterChange(data); //update books state with liked books
@@ -97,7 +99,7 @@ const App = () => {
   const searchBooks = async (query) => {
     setLoading(true);
     try {
-      const response = await fetch(`http://localhost:8000/books/${query}`);
+      const response = await fetch(`${apiUrl}/books/${query}`);
       const data = await response.json();
       setBooks(data);
     } catch (error) {
@@ -118,7 +120,7 @@ const App = () => {
         return;
       }
       try {
-        const response = await fetch('http://localhost:8000/user_preferences/', {
+        const response = await fetch(`${apiUrl}/user_preferences/`, {
           method: isLiked ? 'DELETE' : 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -141,7 +143,7 @@ const App = () => {
 
   const chatQuery = async (query) => {
     try {
-      const response = await fetch(`http://localhost:8000/chat_with_bot?user_query=${query}`);
+      const response = await fetch(`${apiUrl}/chat_with_bot?user_query=${query}`);
       const data = await response.text();
       return data; 
     } catch (error) {

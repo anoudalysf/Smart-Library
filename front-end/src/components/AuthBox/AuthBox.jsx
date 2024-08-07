@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import './AuthBox.css';
 
+const apiUrl = process.env.REACT_APP_API_URL;
+
 const AuthBox = ({ onClose, setAuth }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -8,7 +10,7 @@ const AuthBox = ({ onClose, setAuth }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const url = isLogin ? 'http://localhost:8000/users/login' : 'http://localhost:8000/users/register';
+    const url = isLogin ? `${apiUrl}/users/login` : `${apiUrl}/users/register`;
 
     let options;
     if (isLogin) {
