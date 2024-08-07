@@ -1,6 +1,10 @@
-# BE: GenAI Addition
+<img width="1512" alt="Screenshot 1446-02-03 at 10 22 24 AM" src="https://github.com/user-attachments/assets/50476fc5-8263-4b4f-a782-88eb07c591c9">
+<img width="1512" alt="Screenshot 1446-02-03 at 10 20 51 AM" src="https://github.com/user-attachments/assets/a0e87e6d-0a8b-4e22-b287-559df4da3336">
+<img width="1512" alt="Screenshot 1446-02-03 at 10 21 14 AM" src="https://github.com/user-attachments/assets/f6a2fdcf-5c0c-495e-8589-2abc109c979f">
+
+
 ## How to Run:
-Running the main.py file will start up both FatsAPI and Streamlit, the database integration could be done manually usng the steps provided at the end of this README file, or could instantaniously be created through the code itself I believe.
+Running the main.py file will start up both FastAPI, to run the front-end run 'npm start' in the terminal, the database integration could be done manually usng the steps provided at the end of this README file.
 The vector database and the PostgreSQL database data integration has been done manually through the llm_crud file
 
 ## Recommendation API Requests :
