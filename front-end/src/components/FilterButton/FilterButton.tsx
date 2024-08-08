@@ -1,16 +1,20 @@
 import React, { useState } from "react";
-import './FilterButton.css';
+import styles from './FilterButton.module.css';
 
-const apiUrl = process.env.REACT_APP_API_URL;
+const apiUrl = process.env.REACT_APP_API_URL as string;
 
-const FilterButton = ({onFilterChange}) => {
+interface FilterButtonProps { 
+  onFilterChange: (data: any) => void; //since were giving it data inside our filter
+}
+
+const FilterButton: React.FC<FilterButtonProps>  = ({onFilterChange}) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const toggleFilter = () => {
         setIsOpen(!isOpen);
       };
   
-      const fetchBooks = async (url) => {
+      const fetchBooks = async (url: string) => {
         try {
           const response = await fetch(url);
           const data = await response.json();
@@ -38,11 +42,11 @@ const FilterButton = ({onFilterChange}) => {
     
       return (
         <div>
-          <button className="filter-toggle" onClick={toggleFilter}>
+          <button className={styles.filterToggle} onClick={toggleFilter}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path fillRule="evenodd" clipRule="evenodd" d="M10.0801 18.5928H3.77905C3.36505 18.5928 3.02905 18.2568 3.02905 17.8428C3.02905 17.4288 3.36505 17.0928 3.77905 17.0928H10.0801C10.4941 17.0928 10.8301 17.4288 10.8301 17.8428C10.8301 18.2568 10.4941 18.5928 10.0801 18.5928Z" fill="white"/>
               <path fillRule="evenodd" clipRule="evenodd" d="M19.1909 8.90039H12.8909C12.4769 8.90039 12.1409 8.56439 12.1409 8.15039C12.1409 7.73639 12.4769 7.40039 12.8909 7.40039H19.1909C19.6049 7.40039 19.9409 7.73639 19.9409 8.15039C19.9409 8.56439 19.6049 8.90039 19.1909 8.90039Z" fill="white"/>
-              <mask id="mask0_1_1999" style={{"mask-type":"luminance"}} maskUnits="userSpaceOnUse" x="3" y="5" width="7" height="7">
+              <mask id="mask0_1_1999" style={{"maskType":"luminance"}} maskUnits="userSpaceOnUse" x="3" y="5" width="7" height="7">
                 <path fillRule="evenodd" clipRule="evenodd" d="M3 5.00037H9.2258V11.192H3V5.00037Z" fill="white"/>
               </mask>
               <g mask="url(#mask0_1_1999)">
@@ -52,11 +56,11 @@ const FilterButton = ({onFilterChange}) => {
             </svg>
           </button>
           {isOpen && (
-            <div className="filter-box">
-              <button className="category" onClick={handleMostRated}>Most Rated</button>
-              <button className="category" onClick={handleLeastRated}>Least Rated</button>
-              <button className="category" onClick={handleYearDesc}>Newest</button>
-              <button className="category" onClick={handleYearAsc}>Oldest</button>
+            <div className={styles.filterBox}>
+              <button className={styles.category} onClick={handleMostRated}>Most Rated</button>
+              <button className={styles.category} onClick={handleLeastRated}>Least Rated</button>
+              <button className={styles.category} onClick={handleYearDesc}>Newest</button>
+              <button className={styles.category} onClick={handleYearAsc}>Oldest</button>
             </div>
           )}
         </div>

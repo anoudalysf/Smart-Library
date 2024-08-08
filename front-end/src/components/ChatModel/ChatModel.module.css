@@ -1,34 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
-
-
-.chat-toggle {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background-color: #19191B;
-    color: white;
-    border: none;
-    border-radius: 25%;
-    padding: 10px 20px;
-    cursor: pointer;
-    z-index: 1000; /* makes the button on top of other content */
-  }
   
-.chat-box {
-    position: fixed;
-    bottom: 80px;
-    right: 20px;
-    width: 300px;
-    height: 440px;
-    background-color: #000000;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    z-index: 1000; /* makes the button on top of other content */
-    overflow: hidden;
-  }
-  
-.chat-model {
+.chatModel {
     background-color: #172242;
     margin-left: 15px;
     width: 90%;
@@ -36,18 +8,8 @@
     flex-direction: column;
     height: 94%;
   }
-
-.chat-header {
-    font-family: Work Sans;
-    background-color: #000000;
-    color: white;
-    padding: 10px;
-    /* border-bottom: 1px solid #444; */
-    border-radius: 10px 10px 0 0;
-    text-align: center;
-}
   
-.chat-history {
+.chatHistory {
     flex: 1;
     padding: 10px;
     overflow-y: auto;
@@ -74,7 +36,7 @@
 }
 
   
-.chat-input {
+.chatInput {
     display: flex;
     width: 100%;
     padding: 5px;
@@ -84,7 +46,7 @@
     margin-bottom: 20px;
 }
 
-.chat-input input {
+.chatInput input {
     flex: 1;
     padding: 5px;
     border: none;
@@ -95,7 +57,7 @@
     color: white;
 }
   
-.chat-input button {
+.chatInput button {
     background-color: #445A9A;
     
     color: white;
@@ -105,7 +67,7 @@
     cursor: pointer;
   }
 
-.chat-bubble {
+.chatBubble {
     padding: 10px;
     margin: 10px 0;
     border-radius: 10px;
@@ -113,14 +75,14 @@
     word-wrap: break-word;
   }
   
-.chat-bubble.user {
+.chatBubble.user {
     background-color: #445A9A;
     color: white;
     border-radius: 10px 10px 0 10px;
     padding: 10px;
   }
   
-.chat-bubble.bot {
+.chatBubble.bot {
     background-color: #445A9A;
     color: white;
     border-radius: 10px 10px 10px 0;

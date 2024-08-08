@@ -1,9 +1,15 @@
 import React, { useState } from "react";
-import './AuthButton.css';
+import styles from './AuthButton.module.css';
 import AuthBox from '../AuthBox/AuthBox'
 import { useNavigate } from 'react-router-dom';
 
-const AuthButton = ({ isAuthenticated, role, setAuth }) => {
+interface AuthButtonProp{
+  isAuthenticated: boolean;
+  role: string;
+  setAuth: (username: string | null, user_id: string, role: string | null) => void;
+}
+
+const AuthButton: React.FC<AuthButtonProp> = ({ isAuthenticated, role, setAuth }) => {
     const [showAuthBox, setShowAuthBox] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
@@ -28,7 +34,7 @@ const AuthButton = ({ isAuthenticated, role, setAuth }) => {
       localStorage.removeItem('token');
       localStorage.removeItem('username');
       localStorage.removeItem('role');
-      setAuth(null, null); //update the state to reflect logout
+      setAuth(null, '' ,null); //update the state to reflect logout
       navigate('/');
     };
 
@@ -40,22 +46,23 @@ const AuthButton = ({ isAuthenticated, role, setAuth }) => {
   
     return (
       <div>
-        <button className="auth-toggle" onClick={toggleAuth}>
+        <button className={styles.authToggle} onClick={toggleAuth}>
         <svg
           width="24"
           height="24"
           viewBox="0 0 24 24"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          className={isAuthenticated ? "auth-toggle-logged-in" : "auth-toggle-default"}
+          className={`${isAuthenticated ? styles.authToggleLoggedIn : styles.authToggleDefault}`}
+
         >
-          <mask id="mask0_85_9776" style={{"mask-type":"luminance"}} maskUnits="userSpaceOnUse" x="4" y="14" width="16" height="8">
+          <mask id="mask0_85_9776" style={{"maskType":"luminance"}} maskUnits="userSpaceOnUse" x="4" y="14" width="16" height="8">
             <path fillRule="evenodd" clipRule="evenodd" d="M4 14.4961H19.8399V21.8701H4V14.4961Z" fill="white"/>
           </mask>
           <g mask="url(#mask0_85_9776)">
             <path fillRule="evenodd" clipRule="evenodd" d="M11.921 15.9961C7.66 15.9961 5.5 16.7281 5.5 18.1731C5.5 19.6311 7.66 20.3701 11.921 20.3701C16.181 20.3701 18.34 19.6381 18.34 18.1931C18.34 16.7351 16.181 15.9961 11.921 15.9961ZM11.921 21.8701C9.962 21.8701 4 21.8701 4 18.1731C4 14.8771 8.521 14.4961 11.921 14.4961C13.88 14.4961 19.84 14.4961 19.84 18.1931C19.84 21.4891 15.32 21.8701 11.921 21.8701Z" />
           </g>
-          <mask id="mask1_85_9776" style={{"mask-type":"luminance"}} maskUnits="userSpaceOnUse" x="6" y="2" width="12" height="11">
+          <mask id="mask1_85_9776" style={{"maskType":"luminance"}} maskUnits="userSpaceOnUse" x="6" y="2" width="12" height="11">
             <path fillRule="evenodd" clipRule="evenodd" d="M6.60986 2.00012H17.2299V12.6187H6.60986V2.00012Z" fill="white"/>
           </mask>
           <g mask="url(#mask1_85_9776)">
@@ -65,16 +72,16 @@ const AuthButton = ({ isAuthenticated, role, setAuth }) => {
         </button>
         {showAuthBox && <AuthBox onClose={handleCloseAuthBox} setAuth={setAuth} />}
         {isOpen && (
-        <div className="auth-box">
+        <div className={styles.authBox}>
           {isAuthenticated ? (
             <>
-              {role === 'Admin' && <button className="auth-admin-panel" onClick={goToAdminPanel}>Admin Panel</button>}
-              <button className="auth-logout" onClick={logout}>Logout</button>
+              {role === 'Admin' && <button className={styles.authAdminPanel} onClick={goToAdminPanel}>Admin Panel</button>}
+              <button className={styles.authLogout} onClick={logout}>Logout</button>
             </>
           ) : (
             <>
-          <button className="auth-login" onClick={handleAuthClick}>Login</button>
-          <button className="auth-signup" onClick={handleAuthClick}>Signup</button>
+          <button className={styles.authLogin} onClick={handleAuthClick}>Login</button>
+          <button className={styles.authSignup} onClick={handleAuthClick}>Signup</button>
           </>
           )}
         </div>

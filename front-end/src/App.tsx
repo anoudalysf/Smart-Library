@@ -1,17 +1,31 @@
 import React, { useState, useEffect } from 'react';
-import BookCard from './components/BookCard/BookCard.jsx';
-import SearchBar from './components/SearchBar/SearchBar.jsx';
-import Loader from './components/Loader/Loader.jsx';
+import BookCard from './components/BookCard/BookCard';
+import SearchBar from './components/SearchBar/SearchBar';
+import Loader from './components/Loader/Loader';
 import './App.css';
-import ChatBot from './components/ChatBot/ChatBot.jsx'
-import AuthButton from './components/AuthButton/AuthButton.jsx'
-import AdminPanel from './components/AdminPanel/AdminPanel.jsx';
+import ChatBot from './components/ChatBot/ChatBot'
+import AuthButton from './components/AuthButton/AuthButton'
+import AdminPanel from './components/AdminPanel/AdminPanel';
 import { BrowserRouter as Router, Route, Routes, useNavigate, useLocation} from 'react-router-dom';
 
-const apiUrl = process.env.REACT_APP_API_URL;
+const apiUrl = process.env.REACT_APP_API_URL as string;
 
-const App = () => {
-  const [books, setBooks] = useState([]);
+interface Book {
+  id: string;
+  book_id: number;
+  title: string;
+  authors: string;
+  published_year: number;
+  description: string;
+  categories: string;
+  average_rating: number;
+  thumbnail?: string;
+  num_pages?: number;
+  ratings_count?: number;
+}
+
+const App: React.FC = () => {
+  const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [username, setUsername] = useState('');
@@ -19,7 +33,7 @@ const App = () => {
   const [userid, setUserid] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
-  const [likedBooks, setLikedBooks] = useState([]);
+  const [likedBooks, setLikedBooks] = useState<Book[]>([]);
 
    
   useEffect(() => {
@@ -44,7 +58,7 @@ const App = () => {
     }
   }, [location.pathname, navigate]);
 
-  const setAuth = async (username, user_id, role) => {
+  const setAuth = async (username: string | null, user_id: string, role: string | null) => {
     console.log("Setting auth with role:", role);
     if (username && role) {
       setIsAuthenticated(true);
@@ -79,7 +93,7 @@ const App = () => {
     }
   };
 
-  const fetchLikedBooks = async (user_id) => {
+  const fetchLikedBooks = async (user_id: string) => {
     if (!user_id) {
       alert('You need to be logged in to view liked books.');
       return;
@@ -96,7 +110,7 @@ const App = () => {
   
 
   // search book fetching
-  const searchBooks = async (query) => {
+  const searchBooks = async (query: string) => {
     setLoading(true);
     try {
       const response = await fetch(`${apiUrl}/books/${query}`);
@@ -110,11 +124,11 @@ const App = () => {
   };
 
   //function to handle filter change
-    const handleFilterChange = (filteredBooks) => {
+    const handleFilterChange = (filteredBooks: Book[]) => {
       setBooks(filteredBooks);
     };
 
-    const handleLike = async (book_id, isLiked) => {
+    const handleLike = async (book_id: number, isLiked: boolean) => {
       if (!isAuthenticated) {
         alert("You need to be logged in to like books.");
         return;
@@ -131,7 +145,7 @@ const App = () => {
         if (response.ok) {
           const updatedLikedBooks = isLiked
             ? likedBooks.filter(book => book.book_id !== book_id)
-            : [...likedBooks, { book_id }];
+            : [...likedBooks, { book_id } as Book];
           setLikedBooks(updatedLikedBooks);
         } else {
           console.error('Failed to like/unlike book');
@@ -141,7 +155,7 @@ const App = () => {
       }
     };
 
-  const chatQuery = async (query) => {
+  const chatQuery = async (query: string) => {
     try {
       const response = await fetch(`${apiUrl}/chat_with_bot?user_query=${query}`);
       const data = await response.text();
@@ -176,7 +190,7 @@ const App = () => {
                       <p>No books found.</p>
                     )
                   ) : (
-                    <BookCard key={books.id} book={books} onLike={handleLike} likedBooks={likedBooks}/> //else just display the singular book
+                    <BookCard book={books} onLike={handleLike} likedBooks={likedBooks}/> //else just display the singular book
                   )
                 ) : (
                   <p>No books found.</p>// if its neither an array or object then no books found

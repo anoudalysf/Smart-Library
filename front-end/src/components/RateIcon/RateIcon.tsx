@@ -1,8 +1,11 @@
-// RateIcon.jsx
 import React from 'react';
 
-const RateIcon = ({ rating }) => {
-  const getFillPercentage = () => {
+interface RateIconProps { 
+  rating: number;
+}
+
+const RateIcon: React.FC<RateIconProps> = ({ rating }) => {
+  const getFillPercentage = (): string => {
     if (rating > 4) return '100%';
     if (rating > 3) return '75%';
     if (rating > 2) return '50%';
