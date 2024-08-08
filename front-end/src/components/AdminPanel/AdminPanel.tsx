@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import styles from './AdminPanel.module.css';
 import UpdateModal from '../UpdateModal/UpdateModal';
+import CreateBookModal from '../CreateBookModal/CreateBookModal';
+
 
 const apiUrl = process.env.REACT_APP_API_URL as string;
 
@@ -12,6 +14,18 @@ interface Book {
   description: string;
   categories: string;
   average_rating: number;
+}
+
+interface BookCreate {
+  title: string;
+  authors: string;
+  published_year?: number;
+  description: string;
+  categories: string;
+  average_rating?: number;
+  thumbnail?: string;
+  num_pages?: number;
+  ratings_count?: number;
 }
 
 const DeleteIcon: React.FC = () => {
@@ -36,11 +50,23 @@ const UpdateIcon: React.FC = () => {
   )
 }
 
+const CreateIcon: React.FC = () => {
+  return(
+    <svg width="21" height="19" viewBox="0 0 21 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M6.68024 2.77083C4.60102 2.77083 3.25734 4.14279 3.25734 6.26683V12.7332C3.25734 14.8572 4.60102 16.2292 6.68024 16.2292H13.8038C15.8839 16.2292 17.2284 14.8572 17.2284 12.7332V6.26683C17.2284 4.14279 15.8839 2.77083 13.8046 2.77083H6.68024ZM13.8038 17.4167H6.68024C3.89507 17.4167 2.0246 15.5341 2.0246 12.7332V6.26683C2.0246 3.46591 3.89507 1.58333 6.68024 1.58333H13.8046C16.5898 1.58333 18.4611 3.46591 18.4611 6.26683V12.7332C18.4611 15.5341 16.5898 17.4167 13.8038 17.4167Z" fill="#41D0C8"/>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M10.8378 12.7349C10.7112 12.8483 10.5364 12.9185 10.3432 12.918C9.95673 12.918 9.64412 12.6381 9.64413 12.2922L9.64412 6.63433C9.64412 6.28839 9.95673 6.00856 10.3432 6.00856C10.7297 6.00856 11.0423 6.28839 11.0423 6.63433L11.0423 12.2922C11.043 12.4652 10.9645 12.6216 10.8378 12.7349Z" fill="#41D0C8"/>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M14.0001 9.90673C13.8735 10.0201 13.6987 10.0903 13.5055 10.0897L7.17876 10.0891C6.79229 10.0891 6.47968 9.80932 6.47968 9.46338C6.48034 9.11685 6.79294 8.83702 7.17876 8.83761L13.5055 8.8382C13.892 8.8382 14.2046 9.11803 14.2046 9.46397C14.2052 9.63694 14.1261 9.79397 14.0001 9.90673Z" fill="#41D0C8"/>
+    </svg>
+  )
+}
+
+
 const AdminPanel: React.FC = () => {
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
+  const [isCreateModalOpen, setCreateModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -104,6 +130,29 @@ const AdminPanel: React.FC = () => {
     }
   };
 
+  const handleCreate = async (newBook: BookCreate) => {
+    try {
+      const response = await fetch(`${apiUrl}/books`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify(newBook)
+      });
+      if (response.ok) {
+        const createdBook = await response.json();
+        setBooks([...books, createdBook]);
+        setCreateModalOpen(false);
+      } else {
+        console.log(response);
+        console.error('Failed to create book');
+      }
+    } catch (error) {
+      console.error('Error creating book:', error);
+    }
+  };
+
   return (
     <div className={styles.adminPanelContainer}>
       <div className={styles.adminPanelHeader}>
@@ -111,7 +160,7 @@ const AdminPanel: React.FC = () => {
       </div>
       <div className={styles.adminPanelContent}>
       <div className={styles.booksContainer}>
-          <h2>Books</h2>
+        <h2>Books <button onClick={() => setCreateModalOpen(true)}><CreateIcon /></button></h2>
           {loading ? (
             <p>Loading...</p>
           ) : (
@@ -158,6 +207,11 @@ const AdminPanel: React.FC = () => {
           onSave={handleSave}
         />
       )}
+      {isCreateModalOpen && (
+        <CreateBookModal
+          onClose={() => setCreateModalOpen(false)}
+          onSave={handleCreate}/>
+        )}
     </div>
   );
 };
