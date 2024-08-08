@@ -11,7 +11,7 @@
 }
 
 
-.modal-content {
+.modalContent {
   background-color: #172242;
   margin: auto;
   padding: 20px;
@@ -36,7 +36,7 @@
   cursor: pointer;
 }
 
-.update-modal-form {
+.updateModalForm {
   display: flex;
   flex-direction: column;
   align-items: left;
@@ -45,23 +45,23 @@
   
 }
 
-.update-modal-form label,
-.update-modal-form input,
-.update-modal-form textarea {
+.updateModalForm label,
+.updateModalForm input,
+.updateModalForm textarea {
   display: block;
   width: 100%;
   margin-bottom: 10px;
   font-size: 16px;
 }
 
-.update-modal-form input,
-.update-modal-form textarea {
+.updateModalForm input,
+.updateModalForm textarea {
   padding: 10px;
   border-radius: 5px;
   border: 1px solid #ccc;
 }
 
-.update-modal-form button {
+.updateModalForm button {
   margin-top: 10px;
   padding: 10px;
   font-size: 16px;

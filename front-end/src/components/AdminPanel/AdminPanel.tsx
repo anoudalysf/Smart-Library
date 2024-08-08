@@ -1,11 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import './AdminPanel.css';
+import styles from './AdminPanel.module.css';
 import UpdateModal from '../UpdateModal/UpdateModal';
 
-const apiUrl = process.env.REACT_APP_API_URL;
+const apiUrl = process.env.REACT_APP_API_URL as string;
 
+interface Book {
+  book_id: number;
+  title: string;
+  authors: string;
+  published_year: number;
+  description: string;
+  categories: string;
+  average_rating: number;
+}
 
-const DeleteIcon = () => {
+const DeleteIcon: React.FC = () => {
   return (
       <svg width="21" height="19" viewBox="0 0 21 19" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path fill-rule="evenodd" clip-rule="evenodd" d="M8.27254 11.9832C8.11475 11.9832 7.95695 11.9254 7.83697 11.8091C7.59617 11.5771 7.59617 11.2019 7.83697 10.9699L11.7752 7.17623C12.016 6.94427 12.4055 6.94427 12.6463 7.17623C12.8871 7.40819 12.8871 7.78344 12.6463 8.01539L8.7081 11.8091C8.58812 11.9254 8.43033 11.9832 8.27254 11.9832Z" fill="#FF0000"/>
@@ -16,7 +25,7 @@ const DeleteIcon = () => {
 
 }
 
-const UpdateIcon = () => {
+const UpdateIcon: React.FC = () => {
   return (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path fill-rule="evenodd" clip-rule="evenodd" d="M16.577 22.3686H7.753C4.312 22.3686 2 19.9536 2 16.3596V8.04562C2 4.45162 4.312 2.03662 7.753 2.03662H11.492C11.906 2.03662 12.242 2.37262 12.242 2.78662C12.242 3.20062 11.906 3.53662 11.492 3.53662H7.753C5.169 3.53662 3.5 5.30662 3.5 8.04562V16.3596C3.5 19.0986 5.169 20.8686 7.753 20.8686H16.577C19.161 20.8686 20.831 19.0986 20.831 16.3596V12.3316C20.831 11.9176 21.167 11.5816 21.581 11.5816C21.995 11.5816 22.331 11.9176 22.331 12.3316V16.3596C22.331 19.9536 20.018 22.3686 16.577 22.3686Z" fill="#41D0C8"/>
@@ -27,10 +36,10 @@ const UpdateIcon = () => {
   )
 }
 
-const AdminPanel = () => {
-  const [books, setBooks] = useState([]);
+const AdminPanel: React.FC = () => {
+  const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedBook, setSelectedBook] = useState(null);
+  const [selectedBook, setSelectedBook] = useState<Book | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
@@ -50,7 +59,7 @@ const AdminPanel = () => {
     fetchBooks();
   }, []);
 
-  const handleDelete = async (book_id) => {
+  const handleDelete = async (book_id: number) => {
     try {
       const response = await fetch(`${apiUrl}/books/${book_id}`, {
         method: 'DELETE',
@@ -69,12 +78,12 @@ const AdminPanel = () => {
     }
   };
 
-  const handleUpdate = (book) => {
+  const handleUpdate = (book: Book) => {
     setSelectedBook(book);
     setModalOpen(true);
   };
 
-  const handleSave = async (updatedBook) => {
+  const handleSave = async (updatedBook: Book) => {
     try {
       const response = await fetch(`${apiUrl}/books/${updatedBook.book_id}`, {
         method: 'PUT',
@@ -96,12 +105,12 @@ const AdminPanel = () => {
   };
 
   return (
-    <div className="admin-panel-container">
-      <div className="admin-panel-header">
-        <h1 className="admin-panel-title">Admin Panel</h1>
+    <div className={styles.adminPanelContainer}>
+      <div className={styles.adminPanelHeader}>
+        <h1 className={styles.adminPanelTitle}>Admin Panel</h1>
       </div>
-      <div className="admin-panel-content">
-      <div className="books-container">
+      <div className={styles.adminPanelContent}>
+      <div className={styles.booksContainer}>
           <h2>Books</h2>
           {loading ? (
             <p>Loading...</p>
@@ -124,7 +133,7 @@ const AdminPanel = () => {
                     <td>{book.title}</td>
                     <td>{book.authors}</td>
                     <td>{book.published_year}</td>
-                    <td className="description">{book.description}</td>
+                    <td className={styles.description}>{book.description}</td>
                     <td>{book.categories}</td>
                     <td>{book.average_rating}</td>
                     <td>
@@ -137,12 +146,12 @@ const AdminPanel = () => {
             </table>
           )}
         </div>
-        <div className="users-container">
+        <div className={styles.usersContainer}>
           <h2>Users</h2>
           {/* gonna add the users registered and their roles here later */}
         </div>
       </div>
-      {isModalOpen && (
+      {isModalOpen && selectedBook &&(
         <UpdateModal
           book={selectedBook}
           onClose={() => setModalOpen(false)}

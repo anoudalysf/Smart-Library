@@ -1,10 +1,29 @@
-import React, { useState } from 'react';
-import './UpdateModal.css';
+import React, { useState, ChangeEvent, FormEvent } from 'react';
+import styles from './UpdateModal.module.css';
 
-const UpdateModal = ({ book, onClose, onSave }) => {
-  const [updatedBook, setUpdatedBook] = useState({ ...book });
+interface Book {
+  book_id: number;
+  title: string;
+  authors: string;
+  published_year: number;
+  description: string;
+  categories: string;
+  average_rating: number;
+  thumbnail?: string;
+  num_pages?: number;
+  ratings_count?: number;
+}
 
-  const handleChange = (e) => {
+interface UpdateModelProp{
+  book: Book;
+  onClose: () => void;
+  onSave: (updatedBook: Book) => void;
+}
+
+const UpdateModal: React.FC<UpdateModelProp> = ({ book, onClose, onSave }) => {
+  const [updatedBook, setUpdatedBook] = useState<Book>({ ...book });
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement| HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setUpdatedBook((prevBook) => ({
       ...prevBook,
@@ -12,17 +31,17 @@ const UpdateModal = ({ book, onClose, onSave }) => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     onSave(updatedBook);
   };
 
   return (
-    <div className="modal">
-      <div className="modal-content">
-        <span className="close" onClick={onClose}>&times;</span>
+    <div className={styles.modal}>
+      <div className={styles.modalContent}>
+        <span className={styles.close} onClick={onClose}>&times;</span>
         <h2>Update Book</h2>
-        <form onSubmit={handleSubmit} className="update-modal-form">
+        <form onSubmit={handleSubmit} className={styles.updateModalForm}>
           <label>
             Title:
             <input

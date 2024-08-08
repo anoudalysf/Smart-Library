@@ -1,4 +1,4 @@
-.filter-toggle {
+.filterToggle {
   background-color: #172242;
   color: white;
   border: none;
@@ -7,7 +7,7 @@
   cursor: pointer;
 }
 
-.filter-box {
+.filterBox {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between; 
@@ -23,7 +23,7 @@
   overflow: hidden;
 }
 
-.filter-box button {
+.filterBox button {
   height: 20px;
 }
 
@@ -32,6 +32,6 @@ button.category {
   color: white;
 }
 
-.filter-box button:hover {
+.filterBox button:hover {
   background-color: #445A9A;
 }

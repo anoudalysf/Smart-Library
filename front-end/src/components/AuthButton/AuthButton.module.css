@@ -1,4 +1,4 @@
-.auth-toggle {
+.authToggle {
     position: fixed;
     top: 20px;
     right: 40px;
@@ -15,7 +15,7 @@ button {
 }
 
 
-.auth-box {
+.authBox {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly; 
@@ -31,7 +31,7 @@ button {
     overflow: hidden;
   }
 
-.auth-login {
+.authLogin {
     font-family: Work Sans;
     text-align: center;
     font-size: 15px;
@@ -40,7 +40,7 @@ button {
 
 }
 
-.auth-signup {
+.authSignup {
     font-family: Work Sans;
     text-align: center;
     font-size: 15px;
@@ -49,7 +49,7 @@ button {
 
 } 
 
-.auth-logout {
+.authLogout {
   font-family: Work Sans;
   text-align: center;
   font-size: 15px;
@@ -58,7 +58,7 @@ button {
 
 }
 
-.auth-admin-panel {
+.authAdminPanel {
   font-family: Work Sans;
   text-align: center;
   font-size: 15px;
@@ -67,10 +67,10 @@ button {
 
 }
 
-.auth-toggle-default {
+.authToggleDefault {
   fill: #41D0C8; /* Default color */
 }
 
-.auth-toggle-logged-in {
+.authToggleLoggedIn {
   fill: #FFD700; /* Logged-in color, for example, gold */
 }

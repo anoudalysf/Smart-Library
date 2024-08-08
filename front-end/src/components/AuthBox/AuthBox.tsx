@@ -1,15 +1,20 @@
-import React, { useState } from 'react';
-import './AuthBox.css';
+import React, { useState, ChangeEvent, FormEvent } from 'react';
+import styles from './AuthBox.module.css';
 
-const apiUrl = process.env.REACT_APP_API_URL;
+const apiUrl = process.env.REACT_APP_API_URL as string;
 
-const AuthBox = ({ onClose, setAuth }) => {
+interface AuthBoxProp{
+  onClose: () => void;
+  setAuth: (username: string, user_id: string, role: string) => void;
+}
+
+const AuthBox: React.FC<AuthBoxProp> = ({ onClose, setAuth }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isLogin, setIsLogin] = useState(true); //toggle between login and register
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     const url = isLogin ? `${apiUrl}/users/login` : `${apiUrl}/users/register`;
 
     let options;
@@ -62,10 +67,10 @@ const AuthBox = ({ onClose, setAuth }) => {
   };
 
   return (
-    <div className="auth-box-container">
-      <form onSubmit={handleSubmit} className="auth-box-form">
+    <div className={styles.authBoxContainer}>
+      <form onSubmit={handleSubmit} className={styles.authBoxForm}>
         <h2>{isLogin ? 'Log In' : 'Sign Up'} 
-        <div style={{"height":"0.45px", "background-color": "#EAEFF5", "margin-top": "20px"}}></div>
+        <div style={{"height":"0.45px", "backgroundColor": "#EAEFF5", "marginTop": "20px"}}></div>
         </h2>
         
         <label>
@@ -86,15 +91,15 @@ const AuthBox = ({ onClose, setAuth }) => {
             required
           />
         </label>
-        <label2>
+        <label>
         <button type="submit">{isLogin ? 'Log In' : 'Sign Up'}</button>
-        </label2>
-        <label2>
+        </label>
+        <label>
         <button type="button" onClick={() => setIsLogin(!isLogin)}>
           {isLogin ? 'Switch to Sign Up' : 'Switch to Log In'}
-        </button> </label2>
-        <label2>
-        <button type="button" onClick={onClose} className="close-button">Close</button> </label2>
+        </button></label>
+        <label>
+        <button type="button" onClick={onClose} className={styles.closeButton}>Close</button> </label>
       </form>
     </div>
   );

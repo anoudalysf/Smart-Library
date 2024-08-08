@@ -1,4 +1,4 @@
-.search-bar {
+.searchBar {
     display: flex;
     margin-bottom: 50px;
     text-align: left;
@@ -7,7 +7,7 @@
 
 }
 
-.search-bar input {
+.searchBar input {
     margin-left: 10px;
     margin-top: 5px;
     font-family: Work Sans, Arial;
@@ -19,7 +19,7 @@
     background-color: #445A9A;
 }
 
-.search-bar button {
+.searchBar button {
     margin-left: 10px;
     margin-bottom: 5px;
     font-family: Work Sans, Arial;
