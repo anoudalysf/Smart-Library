@@ -52,6 +52,8 @@ const AuthBox: React.FC<AuthBoxProp> = ({ onClose, setAuth }) => {
           localStorage.setItem('username', username);
           localStorage.setItem('role', result.role);
           localStorage.setItem('user_id', result.user_id);
+          localStorage.setItem('expire_time', result.expire_time);
+          console.log(result.expire_time);
           setAuth(username, result.user_id, result.role);
           //check if the user is still logged in
         }

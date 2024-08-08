@@ -34,9 +34,31 @@ const AuthButton: React.FC<AuthButtonProp> = ({ isAuthenticated, role, setAuth }
       localStorage.removeItem('token');
       localStorage.removeItem('username');
       localStorage.removeItem('role');
+      localStorage.removeItem('expire_time');
       setAuth(null, '' ,null); //update the state to reflect logout
       navigate('/');
     };
+
+    // to log out when the token expires
+    const checkTokenExpiry = () => {
+      const expiresAt = localStorage.getItem('expire_time');
+      if (expiresAt) {
+          const expiryDate = new Date(expiresAt);
+          if (new Date() >= expiryDate) {
+              logout();
+          } else {
+              // Set a timeout to automatically logout when the token expires
+              const timeout = expiryDate.getTime() - new Date().getTime();
+              setTimeout(() => {
+                  logout();
+              }, timeout);
+          }
+      }
+  };
+
+    React.useEffect(() => {
+        checkTokenExpiry();
+    }, []);
 
     // console.log("Role in AuthButton:", role); // for debugging
 
