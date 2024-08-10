@@ -28,6 +28,12 @@ interface BookCreate {
   ratings_count?: number;
 }
 
+interface User {
+  user_id: string;
+  username: string;
+  role: string;
+}
+
 const DeleteIcon: React.FC = () => {
   return (
       <svg width="21" height="19" viewBox="0 0 21 19" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -63,6 +69,7 @@ const CreateIcon: React.FC = () => {
 
 const AdminPanel: React.FC = () => {
   const [books, setBooks] = useState<Book[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
@@ -82,7 +89,25 @@ const AdminPanel: React.FC = () => {
       }
     };
 
+    const fetchUsers = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(`${apiUrl}/users`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+        const data = await response.json();
+        setUsers(data);
+      } catch (error) {
+        console.error('Error fetching users:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchBooks();
+    fetchUsers();
   }, []);
 
   const handleDelete = async (book_id: number) => {
@@ -103,6 +128,26 @@ const AdminPanel: React.FC = () => {
       console.error('Error deleting book:', error);
     }
   };
+
+  const handleDeleteUser = async (user_id: string) => {
+    try {
+        const response = await fetch(`${apiUrl}/users/${user_id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            },
+        });
+        if (response.ok) {
+            setUsers(users.filter(user => user.user_id !== user_id));
+        } else {
+            console.error('Failed to delete user');
+        }
+    } catch (error) {
+        console.error('Error deleting user:', error);
+    }
+};
+
 
   const handleUpdate = (book: Book) => {
     setSelectedBook(book);
@@ -197,7 +242,32 @@ const AdminPanel: React.FC = () => {
         </div>
         <div className={styles.usersContainer}>
           <h2>Users</h2>
-          {/* gonna add the users registered and their roles here later */}
+          {loading ? (
+            <p>Loading...</p>
+          ) : (
+            <table>
+              <thead>
+                <tr>
+                  <th>Username</th>
+                  <th>Role</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {users.map(user => (
+                  <tr key={user.user_id}>
+                    <td>{user.username}</td>
+                    <td>{user.role}</td>
+                    <td>{user.role !== 'Admin' && ( //make it impossile to delete an admin user
+                            <button onClick={() => handleDeleteUser(user.user_id)}>
+                                <DeleteIcon />
+                            </button>)}
+                      </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
       </div>
       {isModalOpen && selectedBook &&(

@@ -65,6 +65,17 @@ def create_user(db: Session, user: User_create):
     return {"user_id": stringified_uid, "username": user.user_name, "role": "User"}
 
 
+def delete_user(db: Session, user_id: str):
+    user_to_delete = (
+        db.query(User).filter(User.user_id == user_id).first()
+    )
+    if user_to_delete.role == "Admin":
+        raise HTTPException(status_code=400, detail="Cannot delete an admin user.")
+    db.delete(user_to_delete)
+    db.commit()
+    return {"user_id": user_to_delete.user_id, "username": user_to_delete.user_name, "role": user_to_delete.role} 
+
+
 def add_preference(
     db: Session, preference: books_schema.User_preferences_create, user_id: str
 ):

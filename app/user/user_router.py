@@ -1,15 +1,25 @@
 from fastapi import APIRouter, Depends, HTTPException
 
+from app.user import user_schema
 from app.user.user_schema import User_create
 from app.user import user_crud, user_model
 from app.common.config.database import get_db
-from typing import Annotated
+from typing import Annotated, List
 from app.common.utils import auth
 from sqlalchemy.orm import Session
 from app.Books import books_schema
 
 
 app = APIRouter()
+
+@app.get("/users", response_model=List[user_schema.UserResponse], tags=["users"])
+def get_all_users(
+    _: Annotated[bool, Depends(auth.RoleChecker(allowed_roles=["Admin"]))],
+    skip: int = 0, 
+    limit: int = 100, 
+    db: Session = Depends(get_db)
+):
+    return user_crud.get_users(db=db, skip=skip, limit=limit)
 
 
 @app.post("/users/register", tags=["users"])
@@ -34,6 +44,15 @@ async def read_users_me(
         "username": current_user.username,
         "role": current_user.role,
     }
+
+
+@app.delete("/users/{user_id}", tags=["users"])
+async def delete_user(
+    _: Annotated[bool, Depends(auth.RoleChecker(allowed_roles=["Admin"]))],
+    user_id: str,
+    db: Session = Depends(get_db),
+):
+    return user_crud.delete_user(db, user_id)
 
 
 @app.put("/users/me/{user_id}", tags=["users"])

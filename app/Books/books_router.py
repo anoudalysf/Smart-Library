@@ -71,11 +71,7 @@ async def delete_book(
 
 
 # GET /recommendations: Retrieve book recommendations for the user based on their preferences.
-@app.get(
-    "/recommendations/{user_id}",
-    response_model=list[books_schema.Books],
-    tags=["recommendations"],
-)
+@app.get("/recommendations/{user_id}", response_model=list[books_schema.Books], tags=["recommendations"])
 async def recommend_book(user_id: str, db: Session = Depends(get_db)):
     try:
         recommendations = books_crud.recommend_book(db, user_id)
