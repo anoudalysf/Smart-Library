@@ -1,6 +1,6 @@
-from sqlalchemy import Column, Integer, String, Float
+from sqlalchemy import Column, ForeignKey, Integer, String, Float
 from app.common.config.database import Base
-
+from sqlalchemy.orm import relationship
 
 class Book(Base):
     __tablename__ = "books"
@@ -23,5 +23,7 @@ class User_preference(Base):
     __tablename__ = "userpreferences"
 
     preference_id = Column(Integer, primary_key=True, autoincrement=True)
-    user_id = Column(String, index=True)
+    user_id = Column(String, ForeignKey('users.user_id', ondelete="CASCADE"))
     book_id = Column(Integer, primary_key=True,index=True)
+
+    user = relationship("User", back_populates="preferences")
