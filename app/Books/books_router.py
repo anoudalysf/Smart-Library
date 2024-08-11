@@ -90,15 +90,15 @@ async def recommend_books_from_query(user_query: str, db: Session = Depends(get_
         print(f"An error occurred while getting recommendations: {e}")
         raise HTTPException(status_code=500, detail=str(e))
     
-# GET /chat_with_bot: Retrieve chat response from the bot based on user query
-@app.get("/chat_with_bot", response_model=str, tags=["chat"])
-async def chat_with_bot_endpoint(user_query: str, db: Session = Depends(get_db)):
-    try:
-        chat_response = books_crud.chat_with_bot(db, user_query)
-        return chat_response
-    except Exception as e:
-        print(f"An error occurred while chatting with the bot: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+# # GET /chat_with_bot: Retrieve chat response from the bot based on user query
+# @app.get("/chat_with_bot", response_model=str, tags=["chat"])
+# async def chat_with_bot_endpoint(user_query: str, db: Session = Depends(get_db)):
+#     try:
+#         chat_response = books_crud.chat_with_bot(db, user_query)
+#         return chat_response
+#     except Exception as e:
+#         print(f"An error occurred while chatting with the bot: {e}")
+#         raise HTTPException(status_code=500, detail=str(e))
     
 # GET /books/sorted/rating_desc: Retrieve a list of books sorted by rating in descending order.
 @app.get("/books/sorted/rating_desc", response_model=list[books_schema.Books], tags=["books"])

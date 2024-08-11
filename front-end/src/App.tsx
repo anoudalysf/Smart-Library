@@ -113,7 +113,7 @@ const App: React.FC = () => {
   const searchBooks = async (query: string) => {
     setLoading(true);
     try {
-      const response = await fetch(`${apiUrl}/books/${query}`);
+      const response = await fetch(`${apiUrl}/similarity?query=${query}`);
       const data = await response.json();
       setBooks(data);
     } catch (error) {

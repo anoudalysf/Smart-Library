@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from app.user import user_router
 from app.authors import authors_router
 from app.Books import books_router
+from app.llama import llm_router
 from app.common.config.database import engine, Base
 import subprocess
 import uvicorn
@@ -29,6 +30,7 @@ app.add_middleware(
 app.include_router(user_router.app)
 app.include_router(authors_router.app)
 app.include_router(books_router.app)
+app.include_router(llm_router.app)
 
 
 @app.get("/")
