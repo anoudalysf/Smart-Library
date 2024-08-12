@@ -9,7 +9,16 @@ from langchain_community.llms import Ollama
 from langchain.prompts import PromptTemplate
 from langchain.chains import RetrievalQA
 from app.Books import books_model, books_schema
+from langchain_core.output_parsers import StrOutputParser
+import re
 
+class CustomStrOutputParser(StrOutputParser):
+     def parse(self, text: str) -> str:
+        cleaned_text = text.strip('"')
+        cleaned_text = cleaned_text.replace('\\n', '<br>')  # Convert newlines to HTML line breaks
+        cleaned_text = re.sub(r'["*]', '', cleaned_text)
+        cleaned_text = cleaned_text.strip()
+        return cleaned_text
 
 embeddings = OllamaEmbeddings(model="nomic-embed-text")
 vectorstore = Chroma(persist_directory="./Smart-Library/app/llama/chromadb", embedding_function=embeddings)
@@ -27,7 +36,6 @@ prompt = PromptTemplate(
     Otherwise, tell the user you don't have what they're looking for. \n
     Do not suggest any books outside of our database \n
     Provide the results in plain text without any additional formatting or special characters unless it's part of the book information. \n
-    Do not format the text with the use of * or "" etc. \n
 
     Book Query:
     {context}
@@ -36,6 +44,8 @@ prompt = PromptTemplate(
     {question}""",
     input_variables=["context","question"],
 )
+
+custom_parser = CustomStrOutputParser()
 
 rag_chain = RetrievalQA.from_chain_type(
     llm=llm, 
@@ -46,9 +56,12 @@ rag_chain = RetrievalQA.from_chain_type(
 def get_response(question):
     result = rag_chain({"query": question})
     response_text = result["result"]
-    answer_start = response_text.find("Answer:") + len("Answer:")
-    answer = response_text[answer_start:].strip()
-    return answer
+    parsed_text = custom_parser.parse(response_text)
+    print(parsed_text)
+    return parsed_text
+    # answer_start = response_text.find("Answer:") + len("Answer:")
+    # answer = parsed_text[answer_start:].strip()
+    # return answer
 
 
 app = APIRouter()
@@ -81,5 +94,6 @@ def similarity_search(query: str,  db: Session = Depends(get_db)):
 
 @app.get("/chat_with_bot", response_model=str, tags=["chat"])
 async def chat_with_bot_endpoint(user_query: str, db: Session = Depends(get_db)):
-    return get_response(user_query)
+    response_text = get_response(user_query)
+    return response_text
 
