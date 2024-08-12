@@ -22,7 +22,8 @@ const ChatBot: React.FC<ChatBotProp> = ({ onSend }) => {
 
   const handleSend = async (query: string) => {
     setResponses(prevResponses => [...prevResponses, { user: query }]);
-    const response = await onSend(query);
+    let response = await onSend(query);
+    response = response.replace(/\\n/g, '<br>');
     setResponses(prevResponses => [...prevResponses, { bot: response }]); //handle user and bot seperately (used to wait to send the query and response together)
   };
 

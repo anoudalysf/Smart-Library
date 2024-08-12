@@ -9,7 +9,8 @@ interface ChatBubbleProp{
 const ChatBubble: React.FC<ChatBubbleProp> = ({ message, isUser }) => {
     return (
       <div className={`${styles.chatBubble} ${isUser ? styles.user : styles.bot}`}>
-        <p><strong>{isUser ? 'User' : 'Bot'}:</strong> {message}</p>
+        <p><strong>{isUser ? 'User' : 'Bot'}:</strong> <span dangerouslySetInnerHTML={{ __html: message }} /> {/* to render it as html */}</p>
+        
       </div>
     );
   };
