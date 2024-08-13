@@ -4,8 +4,9 @@ import styles from'./ChatBox.module.css';
 
 
 interface ChatBotProp {
-  onSend: (query: string) => Promise<string>;
+  onSend: (query: string, onUpdate: (chunk: string) => void) => Promise<void>;
 }
+
 
 interface Response {
   user?: string;
@@ -21,10 +22,19 @@ const ChatBot: React.FC<ChatBotProp> = ({ onSend }) => {
   };
 
   const handleSend = async (query: string) => {
-    setResponses(prevResponses => [...prevResponses, { user: query }]);
-    let response = await onSend(query);
-    response = response.replace(/\\n/g, '<br>');
-    setResponses(prevResponses => [...prevResponses, { bot: response }]); //handle user and bot seperately (used to wait to send the query and response together)
+    setResponses((prevResponses) => [...prevResponses, { user: query }]);
+
+    await onSend(query, (chunk: string) => {
+      // Update the latest bot response with the incoming chunk
+      setResponses((prevResponses) => {
+        const lastResponse = prevResponses[prevResponses.length - 1];
+        if (lastResponse && lastResponse.bot) {
+          lastResponse.bot += chunk.replace(/\\n/g, "<br>");
+          return [...prevResponses.slice(0, -1), lastResponse];
+        }
+        return [...prevResponses, { bot: chunk.replace(/\\n/g, "<br>") }];
+      });
+    });
   };
 
   return (

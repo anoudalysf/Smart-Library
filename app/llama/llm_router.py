@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
+from langchain_ollama import ChatOllama
 from sqlalchemy.orm import Session
 import pandas as pd
 from app.common.config.database import get_db
@@ -11,18 +12,22 @@ from langchain.chains import RetrievalQA
 from app.Books import books_model, books_schema
 from langchain_core.output_parsers import StrOutputParser
 import re
+import asyncio
+from fastapi.responses import StreamingResponse
+from typing_extensions import TypedDict
+
 
 class CustomStrOutputParser(StrOutputParser):
      def parse(self, text: str) -> str:
         cleaned_text = text.strip('"')
-        cleaned_text = cleaned_text.replace('\\n', '<br>')  # Convert newlines to HTML line breaks
+        cleaned_text = cleaned_text.replace('\\n', '<br>')
         cleaned_text = re.sub(r'["*]', '', cleaned_text)
         cleaned_text = cleaned_text.strip()
         return cleaned_text
 
 embeddings = OllamaEmbeddings(model="nomic-embed-text")
 vectorstore = Chroma(persist_directory="./Smart-Library/app/llama/chromadb", embedding_function=embeddings)
-llm = Ollama(model="llama3.1", temperature=0)
+llm = ChatOllama(model="llama3.1", temperature=0)
 retriever = vectorstore.as_retriever(top_k=3)
 
 
@@ -45,6 +50,16 @@ prompt = PromptTemplate(
     input_variables=["context","question"],
 )
 
+# async def stream_response(question: str):
+#     async for chunk in rag_chain.astream({"query": question}):
+#         yield chunk["result"] + "AAAA"
+
+async def stream_response(question: str):
+    async for chunk in rag_chain.astream({"query": question}):
+        text = chunk["result"]
+        for i in range(0, len(text), 100):
+            yield text[i:i +100] + "AAAA"
+
 custom_parser = CustomStrOutputParser()
 
 rag_chain = RetrievalQA.from_chain_type(
@@ -53,9 +68,11 @@ rag_chain = RetrievalQA.from_chain_type(
     retriever=retriever, 
     chain_type_kwargs={"prompt": prompt})
 
-def get_response(question):
+async def get_response(question):
     result = rag_chain({"query": question})
     response_text = result["result"]
+    # async for chunk in llm.astream(result["result"]):
+    #             print(chunk.content)
     parsed_text = custom_parser.parse(response_text)
     print(parsed_text)
     return parsed_text
@@ -94,6 +111,15 @@ def similarity_search(query: str,  db: Session = Depends(get_db)):
 
 @app.get("/chat_with_bot", response_model=str, tags=["chat"])
 async def chat_with_bot_endpoint(user_query: str, db: Session = Depends(get_db)):
-    response_text = get_response(user_query)
-    return response_text
+    # response_text = get_response(user_query)
+    # return response_text
+    return StreamingResponse(stream_response(user_query), media_type="text/plain", headers={"Content-Encoding": "identity"})
 
+async def simple_stream_response():
+    for i in range(5):
+        yield f"Chunk {i}\n"
+        await asyncio.sleep(1)  # Simulate delay between chunks
+
+@app.get("/test_stream")
+async def test_stream():
+    return StreamingResponse(simple_stream_response(), media_type="text/plain")
