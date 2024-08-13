@@ -155,16 +155,38 @@ const App: React.FC = () => {
       }
     };
 
-  const chatQuery = async (query: string) => {
-    try {
-      const response = await fetch(`${apiUrl}/chat_with_bot?user_query=${query}`);
-      const data = await response.text();
-      return data; 
-    } catch (error) {
-      console.error('Error with chat:', error);
-      return "Error: Could not get a response."; 
-    }
-  };
+    const chatQuery = async (
+      query: string,
+      onUpdate: (chunk: string) => void
+    ): Promise<void> => {
+      try {
+        const response = await fetch(`${apiUrl}/chat_with_bot?user_query=${query}`);
+    
+        if (!response.body) {
+          onUpdate("Error: Could not get a response.");
+          return;
+        }
+    
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder("utf-8");
+    
+        let done = false;
+    
+        while (!done) {
+          const { value, done: readerDone } = await reader.read();
+          done = readerDone;
+          const chunk = decoder.decode(value, { stream: true });
+    
+          onUpdate(chunk);
+        }
+      } catch (error) {
+        console.error("Error with chat:", error);
+        onUpdate("Error: Could not get a response.");
+      }
+    };
+    
+    
+    
 
   return (
     <div className="container">
