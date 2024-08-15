@@ -25,14 +25,18 @@ const ChatBot: React.FC<ChatBotProp> = ({ onSend }) => {
     setResponses((prevResponses) => [...prevResponses, { user: query }]);
 
     await onSend(query, (chunk: string) => {
-      // Update the latest bot response with the incoming chunk
+      const formattedChunk = chunk
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') 
+        .replace(/\\n/g, "<br>")
+        .replace(/\\\"(.*?)\\\"/g, '<strong>$1</strong>');
+  
       setResponses((prevResponses) => {
         const lastResponse = prevResponses[prevResponses.length - 1];
         if (lastResponse && lastResponse.bot) {
-          lastResponse.bot += chunk.replace(/\\n/g, "<br>");
+          lastResponse.bot += formattedChunk;
           return [...prevResponses.slice(0, -1), lastResponse];
         }
-        return [...prevResponses, { bot: chunk.replace(/\\n/g, "<br>") }];
+        return [...prevResponses, { bot: formattedChunk }];
       });
     });
   };

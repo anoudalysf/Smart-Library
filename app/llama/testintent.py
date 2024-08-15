@@ -14,7 +14,7 @@ from langchain_ollama import OllamaLLM
 from pydantic import BaseModel, Field
 
 class IntentResponseModel(BaseModel):
-    intent_number: int = Field(description="The intent number ranging from 1 to 4")
+    intent_number: int = Field(description="The intent number ranging from 1 to 7")
     metadata: str = Field(description="The extracted entity related to the intent")
 
 
@@ -57,9 +57,12 @@ class IntentExtractor:
             2. Category Retrieval: The user asks for books in a specific category.
             3. Year Retrieval: The user asks for books published in a specific year.
             4. Ratings Retrieval: The user asks for books by their average ratings.
+            5. Recommendation: The user will ask for a recommendation, or ask to recommend a book/series similar to another seperate book/series.
+            6. Book Retrieval: The user will ask you to just give/return them a specific book.
+            7. Summarizer: The user will ask you to talk about or give them a summary of a book or book series, summarize or describe it to the best of your abilities.
 
             Respond in the following format:
-            Intent Number: [0-4]
+            Intent Number: [0-7]
             Metadata: [Relevant Metadata]
             """
         )
@@ -146,8 +149,10 @@ def generate(state):
     question = state["question"]
     documents = state["documents"]
 
-    # RAG generation
-    generation = rag_chain.invoke({"query": question, "context": documents})
+    response = rag_chain.invoke({"query": question, "context": documents})
+    # return {"documents": documents, "question": question, "generation": generation}
+    generation = response["result"] if isinstance(response, dict) else response
+
     return {"documents": documents, "question": question, "generation": generation}
 
 
@@ -162,7 +167,12 @@ def search_by_category(state):
         state (dict): Updates documents key with relevant books in the specified category
     """
     print("---SEARCH BY CATEGORY---")
-    category = state["question"]
+    question = state["question"]
+    intent_extractor = IntentExtractor()
+    intent_response = intent_extractor.classify_intent_and_extract_entities(question)
+    state["metadata"] = intent_response.metadata
+
+    category = state["metadata"]
     documents = retriever.get_relevant_documents(category)
     
     return {"documents": documents, "question": state["question"]}
@@ -179,7 +189,12 @@ def search_by_author(state):
         state (dict): Updates documents key with relevant books by the specified author
     """
     print("---SEARCH BY AUTHOR---")
-    author = state["question"]
+    question = state["question"]
+    intent_extractor = IntentExtractor()
+    intent_response = intent_extractor.classify_intent_and_extract_entities(question)
+    state["metadata"] = intent_response.metadata
+
+    author = state["metadata"]
     documents = retriever.get_relevant_documents(author)
     
     return {"documents": documents, "question": state["question"]}
@@ -196,7 +211,12 @@ def search_by_published_year(state):
         state (dict): Updates documents key with relevant books by the specified publish year
     """
     print("---SEARCH BY PUBLISHED YEAR---")
-    year = state["question"]
+    question = state["question"]
+    intent_extractor = IntentExtractor()
+    intent_response = intent_extractor.classify_intent_and_extract_entities(question)
+    state["metadata"] = intent_response.metadata
+
+    year = state["metadata"]
     documents = retriever.get_relevant_documents(year)
     
     return {"documents": documents, "question": state["question"]}
@@ -213,10 +233,128 @@ def search_by_average_rating(state):
         state (dict): Updates documents key with relevant books by the average rating
     """
     print("---SEARCH BY AVERAGE RATING---")
-    rating = state["question"]
+    question = state["question"]
+    intent_extractor = IntentExtractor()
+    intent_response = intent_extractor.classify_intent_and_extract_entities(question)
+    state["metadata"] = intent_response.metadata
+
+    rating = state["metadata"]
     documents = retriever.get_relevant_documents(rating)
     
     return {"documents": documents, "question": state["question"]}
+
+
+def recommendation(state):
+    """
+    Recommend a book to the user.
+
+    Args:
+        state (dict): The current graph state
+
+    Returns:
+        state (dict): Updates documents key with relevant book recommendations
+    """
+    print("---RECOMMENDATION---")
+    recommendation = state["question"]
+    documents = retriever.get_relevant_documents(recommendation)
+    
+    return {"documents": documents, "question": state["question"]}
+
+
+# def book_retrieval(state):
+#     """
+#     Retrieve a book to the user in tabular format.
+
+#     Args:
+#         state (dict): The current graph state
+
+#     Returns:
+#         state (dict): Updates documents key with relevant book retrieval
+#     """
+#     print("---BOOK RETRIVAL---")
+#     recommendation = state["question"]
+#     documents = retriever.get_relevant_documents(recommendation)
+    
+#     return {"documents": documents, "question": state["question"]}
+
+import pandas as pd
+
+def book_retrieval(state):
+    """
+    Retrieve a book to the user in tabular format.
+
+    Args:
+        state (dict): The current graph state
+
+    Returns:
+        state (dict): Updates documents key with relevant book retrieval in tabular format
+    """
+    print("---BOOK RETRIEVAL---")
+
+    query = state.get("metadata", state["question"])
+    documents = retriever.get_relevant_documents(query)
+    
+    if documents:
+        output = ""
+        for doc in documents:
+            metadata = doc.metadata
+            output += f"**Title**: {metadata.get('title', 'N/A')}\n"
+            output += f"**Authors**: {metadata.get('authors', 'N/A')}\n"
+            output += f"**Published Year**: {metadata.get('published_year', 'N/A')}\n"
+            output += f"**Average Rating**: {metadata.get('average_rating', 'N/A')}\n"
+            output += f"**Number of Pages**: {metadata.get('num_pages', 'N/A')}\n"
+            output += f"**Categories**: {metadata.get('categories', 'N/A')}\n"
+            output += f"**Description**: {metadata.get('description', 'N/A')}\n"
+            output += "\n"  #add a new line between for when there aer different books
+
+        return {"documents": documents, "question": state["question"], "generation": output.strip()}
+    else:
+        return {"documents": documents, "question": state["question"], "generation": "Sorry, no relevant books found."}
+
+
+def summarizer(state):
+    """
+    Summarize a book on the provided metadata.
+
+    Args:
+        state (dict): The current graph state
+
+    Returns:
+        state (dict): Updates documents key with relevant book summary
+    """
+    print("---SUMMARY---")
+    question = state["question"]
+    intent_extractor = IntentExtractor()
+    intent_response = intent_extractor.classify_intent_and_extract_entities(question)
+    state["metadata"] = intent_response.metadata
+
+    summary = state["metadata"]
+    documents = retriever.get_relevant_documents(summary)
+
+    primary_document = documents[0]
+    summary_context = primary_document.page_content
+    
+
+    summary_prompt = f"""
+    Based on the user's query, provide a detailed and coherent summary of the book or series. Summarize or describe it to the best of your abilities:
+
+    {summary_context}
+
+    Summary:
+    """
+
+    response = llm.invoke(summary_prompt)
+    summary = response.content.strip()
+    
+    return {"documents": documents, "question": state["question"], "generation": summary}
+    # state["generation"] = summary
+    # return state
+
+
+# def update_state(state, intent_number, metadata):
+#     state["intent_number"] = intent_number
+#     state["metadata"] = metadata
+#     return state
 
 
 def decide_intent(state):
@@ -239,19 +377,15 @@ def decide_intent(state):
 
     state["intent_number"] = intent_response.intent_number
     state["metadata"] = intent_response.metadata
+    # print("Before setting state:")
+    # print(state)
 
-    # if "category" in question:
-    #     print("---DECISION: SEARCH BY CATEGORY---")
-    #     return "search_by_category"
-    # elif "author" in question:
-    #     print("---DECISION: SEARCH BY AUTHOR---")
-    #     return "search_by_author"
-    # elif "year" in question:
-    #     print("---DECISION: SEARCH BY PUBLISHED YEAR---")
-    #     return "search_by_published_year"
-    # else:
-    #     print("---DECISION: GENERATE ANSWER---")
-    #     return "generate"
+    # state = update_state(state, intent_response.intent_number, intent_response.metadata)
+
+    # print("State after setting intent and metadata in decide_intent:")
+    # print(state)
+
+
     if intent_response.intent_number == 1:
         print("---DECISION: SEARCH BY AUTHOR---")
         return "search_by_author"
@@ -264,6 +398,15 @@ def decide_intent(state):
     elif intent_response.intent_number == 4:
         print("---DECISION: SEARCH BY AVERAGE RATING---")
         return "search_by_average_rating"
+    elif intent_response.intent_number == 5:
+        print("---DECISION: RECOMMENDATION---")
+        return "recommendation"
+    elif intent_response.intent_number == 6:
+        print("---DECISION: BOOK RETRIVAL---")
+        return "book_retrieval"
+    elif intent_response.intent_number == 7:
+        print("---DECISION: SUMMARY---")
+        return "summarizer"
     else:
         print("---DECISION: GENERATE ANSWER---")
         return "generate"
@@ -276,6 +419,9 @@ workflow.add_node("search_by_category", search_by_category)
 workflow.add_node("search_by_author", search_by_author)
 workflow.add_node("search_by_published_year", search_by_published_year)
 workflow.add_node("search_by_average_rating", search_by_average_rating)
+workflow.add_node("recommendation", recommendation)
+workflow.add_node("book_retrieval", book_retrieval)
+workflow.add_node("summarizer", summarizer)
 
 
 
@@ -290,6 +436,9 @@ workflow.add_conditional_edges(
         "search_by_author": "search_by_author",
         "search_by_published_year": "search_by_published_year",
         "search_by_average_rating":"search_by_average_rating",
+        "recommendation":"recommendation",
+        "book_retrieval":"book_retrieval",
+        "summarizer":"summarizer",
         "generate": "generate",
     },
 )
@@ -298,25 +447,24 @@ workflow.add_edge("search_by_category", "generate")
 workflow.add_edge("search_by_author", "generate")
 workflow.add_edge("search_by_published_year", "generate")
 workflow.add_edge("search_by_average_rating", "generate")
+workflow.add_edge("recommendation", "generate")
+workflow.add_edge("book_retrieval", END)
+workflow.add_edge("summarizer", END)
 
 
 app = workflow.compile()
 
 
-from pprint import pprint
+# from pprint import pprint
 
-# Run
-inputs = {"question": "give me some books with ratings over 4"}
-for output in app.stream(inputs):
-    for key, value in output.items():
-        # Node
-        pprint(f"Node '{key}':")
-        # Optional: print full state at each node
-        # pprint.pprint(value["keys"], indent=2, width=80, depth=None)
-    pprint("\n---\n")
+# inputs = {"question": "talk to me about the book Harry Potter the order of the phoenix"}
+# for output in app.stream(inputs):
+#     for key, value in output.items():
+#         pprint(f"Node '{key}':")
+#     pprint("\n---\n")
 
-# Final generation
-pprint(value["generation"])
+# # Final generation
+# pprint(value["generation"])
 
 
 # async def get_response(question):
