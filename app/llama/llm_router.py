@@ -15,6 +15,7 @@ import re
 import asyncio
 from fastapi.responses import StreamingResponse
 from typing_extensions import TypedDict
+from testintent import app as intent_app
 
 
 class CustomStrOutputParser(StrOutputParser):
@@ -123,3 +124,27 @@ async def simple_stream_response():
 @app.get("/test_stream")
 async def test_stream():
     return StreamingResponse(simple_stream_response(), media_type="text/plain")
+
+
+@app.post("/chat_with_intents", response_model=str, tags=["chat"])
+async def chat_with_intents(user_query: str, db: Session = Depends(get_db)):
+    state = {"question": user_query, "generation": "", "documents": []}
+
+    for output in intent_app.stream(state):
+        final_state = output
+        # print("Final State:", final_state)
+
+    generation = None
+    for key, value in final_state.items():
+        if isinstance(value, dict) and "generation" in value:
+            generation = value["generation"]
+            break
+    
+    if not generation:
+        raise HTTPException(status_code=500, detail="No generation found in the final state.")
+    
+    #ensure the generation is a string, check if its a dict if it is get the result part from it only
+    if isinstance(generation, dict) and "result" in generation:
+        generation = generation["result"]
+
+    return generation

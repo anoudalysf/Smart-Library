@@ -160,7 +160,14 @@ const App: React.FC = () => {
       onUpdate: (chunk: string) => void
     ): Promise<void> => {
       try {
-        const response = await fetch(`${apiUrl}/chat_with_bot?user_query=${query}`);
+        const response = await fetch(`${apiUrl}/chat_with_intents?user_query=${query}`
+          , {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ user_query: query }),
+          });
     
         if (!response.body) {
           onUpdate("Error: Could not get a response.");
