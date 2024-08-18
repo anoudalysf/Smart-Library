@@ -425,6 +425,7 @@ workflow.add_node("summarizer", summarizer)
 
 
 
+
 ##### EDGES #####
 
 workflow.add_edge(START, "retrieve")
@@ -457,7 +458,7 @@ app = workflow.compile()
 
 # from pprint import pprint
 
-# inputs = {"question": "talk to me about the book Harry Potter the order of the phoenix"}
+# inputs = {"question": "give me the chronological order of the percy jackson series"}
 # for output in app.stream(inputs):
 #     for key, value in output.items():
 #         pprint(f"Node '{key}':")
