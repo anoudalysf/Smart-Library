@@ -1,3 +1,4 @@
+import uuid
 from fastapi import APIRouter, Depends, HTTPException
 from langchain_ollama import ChatOllama
 from sqlalchemy.orm import Session
@@ -126,11 +127,15 @@ async def test_stream():
     return StreamingResponse(simple_stream_response(), media_type="text/plain")
 
 
-@app.post("/chat_with_intents", response_model=str, tags=["chat"])
-async def chat_with_intents(user_query: str, db: Session = Depends(get_db)):
-    state = {"question": user_query, "generation": "", "documents": []}
+def generate_session_id():
+    return str(uuid.uuid4())
 
-    for output in intent_app.stream(state):
+@app.post("/chat_with_intents", response_model=str, tags=["chat"])
+async def chat_with_intents(user_query: str, session_id: str = Depends(generate_session_id)):
+    state = {"question": user_query, "generation": "", "documents": []}
+    config = {"configurable": {"thread_id": session_id}}
+
+    for output in intent_app.stream(state, config):
         final_state = output
         # print("Final State:", final_state)
 
@@ -147,4 +152,11 @@ async def chat_with_intents(user_query: str, db: Session = Depends(get_db)):
     if isinstance(generation, dict) and "result" in generation:
         generation = generation["result"]
 
-    return generation
+    async def stream_chunks():
+        chunk_size = 20  # Adjust this to control the size of each chunk
+        for i in range(0, len(generation), chunk_size):
+            yield generation[i:i + chunk_size]
+            await asyncio.sleep(0.1)
+
+    # return generation
+    return StreamingResponse(stream_chunks(), media_type="text/plain", headers={"Content-Encoding": "identity"})

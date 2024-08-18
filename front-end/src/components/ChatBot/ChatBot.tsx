@@ -23,17 +23,20 @@ const ChatBot: React.FC<ChatBotProp> = ({ onSend }) => {
 
   const handleSend = async (query: string) => {
     setResponses((prevResponses) => [...prevResponses, { user: query }]);
-
+  
     await onSend(query, (chunk: string) => {
       const formattedChunk = chunk
         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') 
-        .replace(/\\n/g, "<br>")
+        .replace(/\n/g, "<br>")
         .replace(/\\\"(.*?)\\\"/g, '<strong>$1</strong>');
   
       setResponses((prevResponses) => {
         const lastResponse = prevResponses[prevResponses.length - 1];
         if (lastResponse && lastResponse.bot) {
-          lastResponse.bot += formattedChunk;
+          // Ensure that chunks are only appended if they are not duplicate
+          if (!lastResponse.bot.endsWith(formattedChunk)) {
+            lastResponse.bot += formattedChunk;
+          }
           return [...prevResponses.slice(0, -1), lastResponse];
         }
         return [...prevResponses, { bot: formattedChunk }];

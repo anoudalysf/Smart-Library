@@ -166,33 +166,33 @@ const App: React.FC = () => {
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ user_query: query }),
+            // body: JSON.stringify({ user_query: query }),
           });
     
-        if (!response.body) {
+          if (!response.body) {
+            onUpdate("Error: Could not get a response.");
+            return;
+          }
+      
+          const reader = response.body.getReader();
+          const decoder = new TextDecoder("utf-8");
+      
+          let done = false;
+          let accumulatedText = '';
+      
+          while (!done) {
+            const { value, done: readerDone } = await reader.read();
+            done = readerDone;
+            const chunk = decoder.decode(value, { stream: true });
+
+            accumulatedText += chunk;
+            onUpdate(chunk);  // Directly pass the chunk to the onUpdate function
+          }
+        } catch (error) {
+          console.error("Error with chat:", error);
           onUpdate("Error: Could not get a response.");
-          return;
         }
-    
-        const reader = response.body.getReader();
-        const decoder = new TextDecoder("utf-8");
-    
-        let done = false;
-    
-        while (!done) {
-          const { value, done: readerDone } = await reader.read();
-          done = readerDone;
-          const chunk = decoder.decode(value, { stream: true });
-    
-          onUpdate(chunk);
-        }
-      } catch (error) {
-        console.error("Error with chat:", error);
-        onUpdate("Error: Could not get a response.");
-      }
-    };
-    
-    
+      };
     
 
   return (
